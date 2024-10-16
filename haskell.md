@@ -269,10 +269,14 @@ Prelude > take 5 [1..]
 Working with infinite lists separates the logic of generating a list from processing it, making certain functions easier to implement and more readable.
 
 ---
+
+> **EA-4:** LI-2
+
 ### 3.2. Lists by recursion
 The previous chapter introduced some examples of recursive functions with lists. This section contains exercises to implement recursive functions with lists that return new lists.
 
 > **EA-2:**  LI-13, LI-14, LI-15, LI-16, LI-17, LI-18, LI-20
+> **EA-4:** LI-10
 
 ---
 ### 3.3. Lists by comprehension
@@ -335,6 +339,7 @@ Using multiple generators behaves like nested loops: for each value of the leftm
 List comprehensions provide a powerful and expressive way to create and manipulate lists in Haskell, allowing for concise code that can replace more verbose looping constructs.
 
 > **EA-2:** LI-29, LI-31, LI-32, LI-33, LI-35, LI-36, LI-39
+> **EA-4:** LI-34, LI-37, LI-38, LI-40, LI-41, LI-42
 
 ## 4. Higher-order functions
 
@@ -422,6 +427,7 @@ add' (x, y) = x + y
 | **foldl**     | Left-associative fold of a structure. | (Check section 4.6) |
 
 > **EA-3:** HO-13, HO-14, HO-15, HO-16, HO-17, HO-18, HO-22, HO-23
+> **EA-4:** HO-19, HO-24
 
 ---
 ### 4.5 Application and composition
@@ -450,16 +456,231 @@ Folds have usually **two ingredients**:
 - **Combining Function:** A binary function that takes two inputs(an accumulator and an element from the data structure).
 - **Accumulator:** A value that accumulates results as the fold processes the list.
 
+Folding functions receive three arguments (in order): the *combining function*, the *initial value of the accumulator* and the *list*:
+- *Accumulator:* must be the same type as the return value type of the fold.
+- *Initial value:* usually the identity/neutral element of the combining function.
+
 The **two main folding functions** are:
 - `foldr` (Right Fold):
-
+  - it recursively combines the result of the list's head and accumulator with the result combining with the tail.
 - `foldl` (Left Fold):
+  - it recursively combines the result of combining all but the list's last element and the accumulator with the last element.
 
+Using left or right folds gives the same result if the operation of the combining f function is *associative*: f(fab)c = fa(fbc).
 
+Difference between left and right folds:
+```haskell
+foldr (-) 0 [1..5] -- = (1 - (2 - (3 - (4 - (5 - 0))))) = 3
+foldl (-) 0 [1..5] -- = (((((0 - 1) - 2) - 3) - 4) - 5) = -15
+```
 
-> EA-3: HO-32, HO-33, HO-35, HO-37, HO-40, HO-42, HO-43
+Folds have the *advantage* of allowing for more compact code, relative to recursive functions.
+
+**`scanr` and `scanl`:** work mostly like `foldr`/`foldl` but instead return a list with all the intermidiate values of the computations.
+```haskell
+scanr (-) 0 [1..5] -- = [3,-2,4,-1,5,0]
+scanl (-) 0 [1..5] -- = [0,-1,-3,-6,-10,-15]
+```
+
+> **EA-3:** HO-32, HO-33, HO-35, HO-37, HO-40, HO-42, HO-43
 
 ---
 ### 4.7. Point-free style
-> EA-3: O-47, HO-48, HO-49, HO-50, HO-51, HO-52,
+
+**Point-free style:** the arguments of the function are omitted from its definition.
+
+The main tools to program in point-free style are using composition and other higher-order functions (namely maps, filters and folds), rather than application. 
+
+*Advantage:* function definitions are more readable, elegant and concise.
+
+Example:
+```haskell
+import Data.Char
+capitalize :: [Char] -> [Char]
+capitalize = map toUpper
+
+-- map is used to apply toUpper to each element of the string. The function is
+-- defined in point-free style by leaving map partially applied: only the functional
+-- argument is provided, while the list is left to be applied by those who call
+-- capitalize .
+-- This solution shows an example of how to write an unary function in point-
+-- free style.
+```
+
+> **EA-3:** O-47, HO-48, HO-49, HO-50, HO-51, HO-52,
 HO-53
+
+---
+
+## 5. User-defined types
+
+### 5.1. Creating type synonyms with the type keyword
+
+The `type` keywork can be used to define **type synonyms**.
+- *Advantage:* increase the readability of Haskell code by providing syntatic sugar.
+
+```haskell
+type <synonym name > <type variable 1> <type variable 2> ... = <expression >
+```
+
+- Synonym's name must start with an uppercase.
+- Synonyms cannot have recursive definitions.
+
+```haskell
+type String = [Char]   -- from Prelude
+type Pair a = (a,a)
+type HashMap k v = [(k,v)]
+```
+
+> **EA-4:** UT-3, UT-4
+
+---
+
+### 5.2. Creating algebraic data types with the data keyword
+
+If one wants to define a structure for a person with two strings: one with their name and another with their email:
+```haskell
+type Person = (String,String)
+```
+
+However, the declaration above does not allow one to distinguish a person from any other pair composed of two strings.
+
+If one deines a function that receives as input a pair representing a country and its capital (`type CountryCapital = (String,String)`) one could also pass a Person as input, which is semantically wrong, even though it is syntactically correct.
+
+The `data` keyword circumvents this problem by defining new algebric data types. 
+
+- *Advantages:* better structured code, readability and improvestype safety.
+
+```haskell
+data <type name > <type variable 1> <type variable 2> ... =
+<value constructor 1> <type 1> <type 2> ... |
+<value constructor 2> <type 1> <type 2> ... |
+...
+```
+
+Examples:
+```haskell
+data Bool = False | True           -- Prelude
+data Maybe a = Just a | Nothing    -- Prelude
+data Shape = Circle Double Double Double | Rectangle Double Double Double Double
+```
+
+- **Maybe:** can be used as an alternative to errors in functions that may fail (e. g. `head` with an empty list)
+  - *Just:* has a variable type
+  - *Nothing:* has no arguments/fields
+
+Each value constructor must only be used once in a data declaration. They can be used in two different ways: as functions or in patterns. Examples:
+
+```haskell
+Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double
+Prelude > :type Circle
+  Circle :: Double -> Double -> Double -> Shape
+Prelude > :type ( Circle 2.0)
+  ( Circle 2.0) :: Double -> Double -> Shape
+Prelude > let area (Circle _ _ r) = pi*r^2
+Prelude > :type area
+  area :: Shape -> Double
+Prelude > area( Circle 1.0 2.0 1.0)
+  3.141592653589793
+Prelude > map (area .( Circle 1.0 2.0)) [1..5]
+  [3.141592653589793 ,12.566370614359172 ,28.274333882308138 ,50.26548245743669 ,78.53981633974483]
+```
+
+The type of the area function is Shape -> Double rather than Circle -> Double , since Shape is the actual type's name, while Circle is the name of one of its value constructors. 
+
+- Unlike type synonyms, type definitions can be recursive.
+```haskell
+Prelude > data MyList a = List a ( MyList a) | EmptyList
+*Main > :type (List 4 (List 6 EmptyList ))
+  (List 4 (List 6 EmptyList )) :: Num a => MyList a
+```
+
+> **EA-4:** UT-6, UT-7, UT-8
+
+---
+
+### 5.3. Derived types
+
+Consider the `Shape` type defined in the previous section. To print a shape or compare two shapes one must define that it derives the typeclass Eq, using the `deriving`keyword.
+
+```haskell
+Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double
+Prelude > Rectangle 1.0 2.0 3.0 4.0
+<interactive >:2:1: error:
+* No instance for (Show Shape) arising from a use of 'print'
+* In a stmt of an interactive GHCi command : print it
+Prelude > Circle 3 4 5 == Circle 3 5 5
+<interactive >:3:1: error:
+* No instance for (Eq Shape) arising from a use of '=='
+* In the expression : Circle 3 4 5 == Circle 3 5 5
+In an equation for 'it': it = Circle 3 4 5 == Circle 3 5 5
+```
+```haskell
+Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double deriving (Show ,Eq)
+Prelude > Rectangle 1.0 2.0 3.0 4.0
+Rectangle 1.0 2.0 3.0 4.0
+Prelude > Circle 3 4 5 == Circle 3 5 5
+False
+Prelude > Circle 3 4 5 == Circle 3 4 5
+True
+```
+
+Other examples:
+```haskell
+Prelude > data Tempo = Adagio | Andante | Moderato | Allegro | Presto deriving (Eq ,Ord ,Show ,Enum)
+
+-- Ord
+Prelude > Andante < Allegro
+True
+Prelude > Adagio >= Moderato
+False
+
+-- Enum
+Prelude > [ Adagio ..]
+[Adagio ,Andante ,Moderato ,Allegro , Presto]
+Prelude > [Adagio , Moderato ..]
+[Adagio ,Moderato , Presto ]
+Prelude > [Presto , Allegro ..]
+[Presto ,Allegro ,Moderato ,Andante , Adagio]
+```
+
+For types T with parameters that derive Ord , a value A is less than a value B if the value constructor of A comes before the one for B in the definition of T. 
+```haskell
+Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double deriving (Eq ,Ord)
+Prelude > Circle 1 2 3 < Rectangle 1 2 3 4
+True
+Prelude > Circle 1 2 3 < Circle 1 2 3
+False
+Prelude > Circle 1 50 3 < Circle 1 2 3
+False
+Prelude > Circle 1 2 3 < Circle 1 3 3
+True
+```
+
+---
+
+### 5.4. Named fields
+
+When defining a new type using data , the fields of a value can be given names using the record syntax. If a class with named fields is an instance of Show, then they are printed in a different manner. 
+
+```haslell
+Prelude > data Date = Date { day :: Int , month :: Int , year :: Int} deriving (Show)
+Prelude > Date 18 6 2006
+Date {day = 18, month = 6, year = 2006}
+Prelude > Date {day = 18, year = 2006 , month = 6}
+Date {day = 18, month = 6, year = 2006}
+```
+
+- *Advantage:* allowing one to forget their order in the definition of a value constructor. 
+
+It also avoids the need to write "getter" functions, which retrieve a field of a value. 
+
+```haskell
+Prelude > let d = Date {day = 18, year = 2006 , month = 6}
+Prelude > month(d)
+6
+```
+
+> **EA-4:** UT-9
+
+---
