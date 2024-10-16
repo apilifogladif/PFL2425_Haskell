@@ -2,6 +2,59 @@
 
 Livro: [Learning Hakell](https://moodle2425.up.pt/pluginfile.php/95817/mod_resource/content/21/Learning%20Haskell%20by%20Solving%20Problems.pdf)
 
+## Programação Funcional
+
+Programas em C ou Java são normalmente *imperativos*: sequências de comandos que modificam variáveis em memória.
+
+Num programa puramente funcional **nunca modificamos variáveis**: só aplicamos funções.
+
+### Vantagens da programação funcional
+- Programas mais concisos
+- Próximos duma especificação matemática
+- Mais enfoque na análise do problema e menos em “debugging”
+- Ajuda a programar melhor em qualquer linguagem!
+- Mais modularidade: decompor problemas em componentes pequenas e re-utilizáveis
+- Garantias de correção: demonstrações de correção usando provas matemáticas, maior facilidade em fazer testes automáticos
+- Concorrencia/paralelismo: a ordem de execução não afecta os resultados
+
+### Desvantagens da programação funcional
+- Os compiladores e interpretadores são mais complexos
+- Difícil prever os custos de execução (tempo/espaço)
+- Alguns programas de baixo-nível necessitam de controlo preciso de tempo/espaço
+- Alguns algoritmos são mais eficientes quando implementados de forma imperativa
+
+### Comandos do interpretador
+| Comand | Abrev. | Meaning |
+|--------|--------|---------|
+| `:load ficheiro` | `:l` | carregar um ficheiro |
+| `:reload` | `:r` | re-carregar modificações |
+| `:edit` | | editar o ficheiro atual |
+| `:set editor prog` | | definir o editor |
+| `:type expr` | `:t` | mostrar o tipo duma expressão |
+| `:help` | | obter ajuda |
+| `:quit` | `:q` | terminar a sessão |
+
+### Notas
+- Os nomes de funções e variáveis devem começar por letras mínusculas e podem incluir letras, dígitos, sublinhados e apóstrofes.
+- A indentação indica o âmbito das declarações:
+```haskell
+a = b+c
+  where b = 1
+        c = 2
+d = a*2
+```
+corresponde a:
+```haskell
+a = b+c
+  where {b = 1;
+        c = 2}
+d = a*2
+```
+- Todas as definições num mesmo âmbito devem começar na mesma coluna.
+![alt text](assets/image.png)
+
+
+
 ## 1. Introduction
 
 ### 1.2. Simple Expressions
@@ -127,24 +180,24 @@ Lists can be defined in various ways:
   
   `[x | x <- [1..15], mod x 3 == 1]` 
 
-| Function | Comment                                                                                          | Example                        |
-|----------|--------------------------------------------------------------------------------------------------|--------------------------------|
-| **(++)**    | Appends two lists.                                                                                | `[1,2] ++ [3,4] -> [1,2,3,4]`  |
-| **head**    | Extracts the first element of non-empty lists.                                                    | `head [1,2,3] -> 1`            |
-| **tail**    | Removes the first element of non-empty lists (output can be [] if input is a singleton).          | `tail [1,2,3] -> [2,3]`        |
-| **last**    | Extracts the last element of non-empty lists.                                                     | `last [1,2,3] -> 3`            |
-| **init**    | Removes the last element of non-empty lists.                                                      | `init [1,2,3] -> [1,2]`        |
-| **elem**    | Checks if a value is contained in a list.                                                         | `elem 3 [1,2,3] -> True`       |
-| **(!!)**    | Returns the n-th element of a list (with indices starting at 0).                                  | `[1,2,3] !! 1 -> 2`            |
-| **length**  | Returns the number of elements in a list.                                                         | `length [1,2,3] -> 3`          |
-| **reverse** | Inverts the order of the elements in a list.                                                      | `reverse [1,2,3] -> [3,2,1]`   |
-| **take**    | Extracts the first n elements of a list.                                                          | `take 2 [1,2,3] -> [1,2]`      |
-| **drop**    | Removes the first n elements of a list.                                                           | `drop 2 [1,2,3] -> [3]`        |
-| **repeat**  | Creates an infinite list with x as the value of all elements.                                     | `repeat 1 -> [1,1,1,1,1,1...]` |
-| **cycle**   | Creates an infinite repetition of a list.                                                         | `cycle [1,2,3] -> [1,2,3,1,2,3...]` |
-| **zip**     | Creates a list with the corresponding pairs of two lists.                                         | `zip [1,2,3] "abc" -> [(1,'a'),(2,'b'),(3,'c')]` |
-| **sum**     | Adds all of the numbers in the list.                                                              | `sum [1,2,3,4] -> 10`          |
-| **product** | Multiplies all of the numbers in the list.                                                        | `product [1,2,3,4] -> 24`      |
+| Function | Comment | Example |
+|----------|---------|---------|
+| **(++)**    | Appends two lists. | `[1,2] ++ [3,4] -> [1,2,3,4]`  |
+| **head**    | Extracts the first element of non-empty lists.  | `head [1,2,3] -> 1` |
+| **tail**    | Removes the first element of non-empty lists (output can be [] if input is a singleton). | `tail [1,2,3] -> [2,3]` |
+| **last**    | Extracts the last element of non-empty lists. | `last [1,2,3] -> 3` |
+| **init**    | Removes the last element of non-empty lists. | `init [1,2,3] -> [1,2]` |
+| **elem**    | Checks if a value is contained in a list. | `elem 3 [1,2,3] -> True` |
+| **(!!)**    | Returns the n-th element of a list (with indices starting at 0). | `[1,2,3] !! 1 -> 2` |
+| **length**  | Returns the number of elements in a list. | `length [1,2,3] -> 3` |
+| **reverse** | Inverts the order of the elements in a list. | `reverse [1,2,3] -> [3,2,1]` |
+| **take**    | Extracts the first n elements of a list. | `take 2 [1,2,3] -> [1,2]` |
+| **drop**    | Removes the first n elements of a list. | `drop 2 [1,2,3] -> [3]` |
+| **repeat**  | Creates an infinite list with x as the value of all elements. | `repeat 1 -> [1,1,1,1,1,1...]` |
+| **cycle**   | Creates an infinite repetition of a list. | `cycle [1,2,3] -> [1,2,3,1,2,3...]` |
+| **zip**     | Creates a list with the corresponding pairs of two lists. | `zip [1,2,3] "abc" -> [(1,'a'),(2,'b'),(3,'c')]` |
+| **sum**     | Adds all of the numbers in the list. | `sum [1,2,3,4] -> 10` |
+| **product** | Multiplies all of the numbers in the list. | `product [1,2,3,4] -> 24` |
 
 <p align="center">Table 2.3 Some Prelude functions for lists</p>
 
@@ -285,7 +338,31 @@ List comprehensions are a concise way to build lists using other lists. The gene
 `[<pattern> | <generator 1>, <generator 2>, ..., <guard 1>, <guard 2> ...]`
 
 - **Generators**: Each generator has the format `<pattern> <- <list>`. They iterate through their respective lists and produce values for each element visited.
+```haskell
+-- Ordem entre geradores
+-- x primeiro, y depois
+> [(x,y) | x<-[1,2,3], y<-[4,5]]
+[(1,4),(1,5),(2,4),(2,5),(3,4),(3,5)]
+-- y primeiro, x depois
+> [(x,y) | y<-[4,5], x<-[1,2,3]]
+[(1,4),(2,4),(3,4),(1,5),(2,5),(3,5)]
+
+> [(x,y) | x<-[1..3], y<-[x..3]]
+[(1,1),(1,2),(1,3),(2,2),(2,3),(3,3)]
+
+> [(x,y) | y<-[x..3], x<-[1..3]]
+error: Variable not in scope: x
+```
 - **Guards**: Conditions that must be met for an instance of the pattern to be included in the output list. They function as filters.
+```haskell
+-- os inteiros x tal que x está entre 1 e 10 e x é par.
+> [x | x<-[1..10], x‘mod‘2==0]
+[2,4,6,8,10]
+
+-- divisores de um numero inteiro positivo
+divisores :: Int -> [Int]
+divisores n = [x | x<-[1..n], n‘mod‘x==0]
+```
 
 **Examples:**
 
@@ -426,6 +503,134 @@ add' (x, y) = x + y
 | **foldr**     | Right-associative fold of a structure. | (Check section 4.6) |
 | **foldl**     | Left-associative fold of a structure. | (Check section 4.6) |
 
+**`Filter`**
+
+```haskell
+filter :: (a -> Bool) -> [a] -> [a]
+
+> filter (\n->n‘mod‘2==0) [1..10]
+[2,4,6,8,10]
+> filter isLower "Hello, world!"
+"elloworld"
+
+-- can be defined as 
+filter p xs = [x | x<-xs, p x]
+-- or
+filter p [] = []
+filter p (x:xs)
+    | p x = x : filter p xs
+    | otherwise = filter p xs
+```
+**`takeWhile` and `dropWhile`**
+
+```haskell
+takeWhile, dropWhile :: (a -> Bool) -> [a] -> [a]
+
+> takeWhile isLetter "Hello, world!"
+"Hello"
+> dropWhile isLetter "Hello, world!"
+", world!"
+
+-- can be defined as
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile p [] = []
+takeWhile p (x:xs)
+    | p x = x : takeWhile p xs
+    | otherwise = []
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile p [] = []
+dropWhile p (x:xs)
+    | p x = dropWhile p xs
+    | otherwise = x:xs
+```
+
+**`all` and `any`**
+
+```haskell
+all, any :: (a -> Bool) -> [a] -> Bool
+
+> all (\n -> n‘mod‘2==0) [2,4,6,8]
+True
+> any (\n -> n‘mod‘2/=0) [2,4,6,8]
+False
+> all isLower "Hello, world!"
+False
+> any isLower "Hello, world!"
+True
+
+-- can be defined as
+all p xs = and (map p xs)
+any p xs = or (map p xs)
+-- or
+all p [] = True
+all p (x:xs) = p x && all p xs
+any p [] = False
+any p (x:xs) = p x || any p xs
+```
+
+**`foldr`**
+
+```haskell
+sum [] = 0                           z = 0
+sum (x:xs) = x + sum xs             ⊕ = +
+
+sum = foldr (+) 0
+
+product [] = 1                       z = 1
+product (x:xs) = x * product xs     ⊕ = ∗
+
+product = foldr (*) 1
+
+and [] = True                        z = True
+and (x:xs) = x && and xs            ⊕ = &&
+
+and = foldr (&&) True
+
+or [] = False                        z = False
+or (x:xs) = x || or xs              ⊕ = ||
+
+or = foldr (||) False
+
+length [] = 0                        z = 0
+length (x:xs)= 1 + length xs        ⊕ = \_ n → 1 + n
+
+length = foldr (\_ n->n+1) 0
+
+-- can be defined as
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr f z [] = z
+foldr f z (x:xs) = f x (foldr f z xs)
+
+foldr f z [1,2,3,4,5] = foldr f z (1:2:3:4:5:[]) = f 1 (f 2 (f 3 (f 4 (f 5 z))))
+```
+
+**`foldl`**
+
+`foldr` vs `foldl`:
+```haskell
+foldl (+) 0 [1,2,3,4] = (((0+1)+2)+3)+4 = 10
+foldr (+) 0 [1,2,3,4] = 1+(2+(3+(4+0))) = 10
+``` 
+```haskell
+-- can be defined as
+foldl :: (a -> b -> a) -> a -> [b] -> a
+foldl f z [] = z
+foldl f z (x:xs) = foldl f (f z x) xs
+
+foldl f z [1,2,3,4,5] = foldl f z (1:2:3:4:5:[]) = f (f (f (f (f z 1) 2) 3) 4) 5
+```
+
+**Composição (.)**
+
+```haskell
+(.) :: (b -> c) -> (a -> b) -> a -> c
+f . g = \x -> f (g x)
+
+f xs = sum (map (^2) (filter even xs))
+-- is equivalent to
+f = sum . map (^2) . filter even
+```
+
 > **EA-3:** HO-13, HO-14, HO-15, HO-16, HO-17, HO-18, HO-22, HO-23
 > **EA-4:** HO-19, HO-24
 
@@ -499,16 +704,33 @@ import Data.Char
 capitalize :: [Char] -> [Char]
 capitalize = map toUpper
 
--- map is used to apply toUpper to each element of the string. The function is
--- defined in point-free style by leaving map partially applied: only the functional
--- argument is provided, while the list is left to be applied by those who call
--- capitalize .
--- This solution shows an example of how to write an unary function in point-
--- free style.
+{- map is used to apply toUpper to each element of the string. The function is
+defined in point-free style by leaving map partially applied: only the functional
+argument is provided, while the list is left to be applied by those who call
+capitalize .
+This solution shows an example of how to write an unary function in point-
+free style. -}
 ```
 
 > **EA-3:** O-47, HO-48, HO-49, HO-50, HO-51, HO-52,
 HO-53
+
+---
+### Listas Infinitas
+- Because of lazy evaluation, lists are calculated as needed and only as far as necessary.
+
+```haskell
+uns :: [Integer]
+uns = 1 : uns
+
+head uns = head (1:uns) = 1
+```
+
+- A computation that needs to traverse an entire infinite list does not finish.
+
+```haskell
+length uns = length (1:uns) = 1 + length uns = 1 + length (1:uns) = 1 + (1 + length uns) = ... não termina
+```
 
 ---
 
@@ -525,6 +747,11 @@ type <synonym name > <type variable 1> <type variable 2> ... = <expression >
 
 - Synonym's name must start with an uppercase.
 - Synonyms cannot have recursive definitions.
+```haskell
+type Pos = (Int,Int)
+type Cells = [Pos]            -- OK
+type Tree = (Int,[Tree])      -- ERROR
+```
 
 ```haskell
 type String = [Char]   -- from Prelude
@@ -549,6 +776,13 @@ If one deines a function that receives as input a pair representing a country an
 
 The `data` keyword circumvents this problem by defining new algebric data types. 
 
+- The data statement lists the alternative values ​​of the new type.
+- `True` and `False` are the constructors of the `Bool type`
+```haskell
+data Bool = False | True    -- Prelude
+```
+- Constructors must be unique (cannot be used in different types)
+- The names of types and constructors must begin with a capital letter
 - *Advantages:* better structured code, readability and improvestype safety.
 
 ```haskell
