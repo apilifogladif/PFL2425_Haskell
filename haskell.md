@@ -51,9 +51,12 @@ a = b+c
 d = a*2
 ```
 - Todas as definições num mesmo âmbito devem começar na mesma coluna.
+
 ![alt text](assets/image.png)
 
 
+---
+---
 
 ## 1. Introduction
 
@@ -73,7 +76,7 @@ d = a*2
 
 <p align="center">Table 1.1 Some basic numeric and logical operators in Haskell</p>
 
-> **EA-1:** IN-3, IN-4
+> [**EA-1:** IN-3, IN-4](AE1.hs)
 
 ---
 ### 1.3. Simple functions
@@ -83,10 +86,9 @@ In Haskell, since functions behave like any other entity, they are defined using
 The general syntax to define a function is:
 `<function name > <argument 1> <argument 2> ... = <expression >`
 
-Valid function and argument names begin with a lowercase letter, followed by letters, numbers, underscores (example: func_2 ) and apostrophes ( func' ). The names used cannot be any of the following reserved keywords: case class data default deriving do else if import in infix infixl infixr instance let module 
-    → newtype of then type where .
+Valid function and argument names begin with a lowercase letter, followed by letters, numbers, underscores (example: func_2 ) and apostrophes ( func' ). The names used cannot be any of the following reserved keywords: case class data default deriving do else if import in infix infixl infixr instance let module newtype of then type where .
 
-> **EA-1:** IN-6
+> [**EA-1:** IN-6](AE1.hs)
 
 ---
 ### 1.4. Conditional structures
@@ -96,17 +98,19 @@ There are various ways of writing conditional structures in Haskell, which, give
 - pattern matching.
 - case expressions.
 
-> **EA-1:** IN-13
+> [**EA-1:** IN-13](AE1.hs)
 
 ---
 ### 1.5. Recursion
-In Haskell, there is not iteration, namely “for” and “while” cycles. To execute a fragment of code a certain number of times until a condition is met, one must use recursion, where a function's expression contains a call to itself.
+In Haskell, there is not iteration, namely `for` and `while` cycles. To execute a fragment of code a certain number of times until a condition is met, one must use recursion, where a function's expression contains a call to itself.
 
-> **EA-2:** IN-17, IN-18
+> [**EA-2:** IN-17, IN-18](AE2.hs)
+
+---
+---
 
 ## 2. Fundamentals on types
 
----
 ### 2.1. Elementary types
 The type of any expression or function can be checked in GHCI using the `:type` command (or `:t` , for short). Examples:
 ```haskell
@@ -152,7 +156,7 @@ Prelude > :type ('x',(True ,False))
 | **snd**  | Returns the second element of a pair (binary tuple).        | `snd (3, 8) -> 8`  |
 <p align="center">Table 2.2 Some Prelude functions for tuples</p>
 
-> **EA-1:** FT-3, FT-4
+> [**EA-1:** FT-3, FT-4](AE1.hs)
 
 ---
 ### 2.3. Lists
@@ -203,8 +207,8 @@ Lists can be defined in various ways:
 
 There is also a module with more useful functions to work with lists, Data.List. `import Data.List`
 
-> **EA-1:** FT-9, FT-10, FT-11
-> **EA-2:** FT-14, FT-18, FT-19
+> [**EA-1:** FT-9, FT-10, FT-11](AE1.hs)
+> [**EA-2:** FT-14, FT-18, FT-19](AE2.hs)
 
 ---
 ### 2.4. Typeclasses
@@ -239,7 +243,7 @@ zip [1,2] "abc" :: Num a => [(a, Char)]
 
 When asked about the type of numbers (using the `:type` command), GHCI typically responds with a type variable to link it to a type class (usually Num ) rather than a specific type.
 
-> **EA-1:** FT-21
+> [**EA-1:** FT-21](AE1.hs)
 
 ---
 ### 2.6. Functional Types
@@ -258,11 +262,13 @@ If there are class constraints, they appear before the function name.
 
 - **Polymorphic Functions**: Functions that have type declarations containing type variables are known as polymorphic functions.
 
-> **EA-1:** FT-23, FT-24
+> [**EA-1:** FT-23, FT-24](AE1.hs)
+
+---
+---
 
 ## 3. Lists
 
----
 ### 3.1. Lists by range
 
 Lists in Haskell can be defined using various range formats:
@@ -321,15 +327,14 @@ Prelude > take 5 [1..]
 ```
 Working with infinite lists separates the logic of generating a list from processing it, making certain functions easier to implement and more readable.
 
+> [**EA-4:** LI-2](AE4.hs)
+
 ---
-
-> **EA-4:** LI-2
-
 ### 3.2. Lists by recursion
 The previous chapter introduced some examples of recursive functions with lists. This section contains exercises to implement recursive functions with lists that return new lists.
 
-> **EA-2:**  LI-13, LI-14, LI-15, LI-16, LI-17, LI-18, LI-20
-> **EA-4:** LI-10
+> [**EA-2:**  LI-13, LI-14, LI-15, LI-16, LI-17, LI-18, LI-20](AE2.hs)
+> [**EA-4:** LI-10](AE4.hs)
 
 ---
 ### 3.3. Lists by comprehension
@@ -415,8 +420,11 @@ Using multiple generators behaves like nested loops: for each value of the leftm
 
 List comprehensions provide a powerful and expressive way to create and manipulate lists in Haskell, allowing for concise code that can replace more verbose looping constructs.
 
-> **EA-2:** LI-29, LI-31, LI-32, LI-33, LI-35, LI-36, LI-39
-> **EA-4:** LI-34, LI-37, LI-38, LI-40, LI-41, LI-42
+> [**EA-2:** LI-29, LI-31, LI-32, LI-33, LI-35, LI-36, LI-39](AE2.hs)
+> [**EA-4:** LI-34, LI-37, LI-38, LI-40, LI-41, LI-42](AE4.hs)
+
+---
+---
 
 ## 4. Higher-order functions
 
@@ -426,7 +434,7 @@ This chapter covers **higher-order functions**, central to functional programmin
 ### 4.1. Fundamentals on higher-order functions
 In functional type declarations, the `->` symbol is right-associative, meaning `a -> b -> c` is equivalent to `a -> (b -> c)`. Parentheses are used to clarify when an argument is a function. For example, a function f with a functional argument and returning another function would be declared as `f :: (a -> b) -> c -> (d -> e)`. To use such a function, the usual prefix notation can be applied: `f xyz`, where `x`, `y`, and `z` are the function's arguments.
 
-> **EA-3:** HO-3, HO-4, HO-7
+> [**EA-3:** HO-3, HO-4, HO-7](AE3.hs)
 
 ---
 ### 4.2. Lambdas
@@ -455,7 +463,7 @@ Examples:
 
 Lambdas are commonly used in places where defining a full function is unnecessary.
 
-> **EA-3:** HO-8
+> [**EA-3:** HO-8](AE3.hs)
 
 ---
 ### 4.3. Currying
@@ -483,7 +491,7 @@ add x y = x + y
 add' :: (Int, Int) -> Int
 add' (x, y) = x + y
 ```
-> **EA-3:** HO-10
+> [**EA-3:** HO-10](AE3.hs)
 
 ---
 ### 4.4. Common higher-order functions
@@ -631,8 +639,8 @@ f xs = sum (map (^2) (filter even xs))
 f = sum . map (^2) . filter even
 ```
 
-> **EA-3:** HO-13, HO-14, HO-15, HO-16, HO-17, HO-18, HO-22, HO-23
-> **EA-4:** HO-19, HO-24
+> [**EA-3:** HO-13, HO-14, HO-15, HO-16, HO-17, HO-18, HO-22, HO-23](AE3.hs)
+> [**EA-4:** HO-19, HO-24](AE4.hs)
 
 ---
 ### 4.5 Application and composition
@@ -651,7 +659,7 @@ succ $ succ 1         -- 3
 (succ . (*8)) 4      -- 33
 ```
 
-> **EA-3:** HO-27, HO-29
+> [**EA-3:** HO-27, HO-29](AE3.hs)
 
 ---
 ### 4.6 Folds
@@ -687,7 +695,7 @@ scanr (-) 0 [1..5] -- = [3,-2,4,-1,5,0]
 scanl (-) 0 [1..5] -- = [0,-1,-3,-6,-10,-15]
 ```
 
-> **EA-3:** HO-32, HO-33, HO-35, HO-37, HO-40, HO-42, HO-43
+> [**EA-3:** HO-32, HO-33, HO-35, HO-37, HO-40, HO-42, HO-43](AE3.hs)
 
 ---
 ### 4.7. Point-free style
@@ -712,8 +720,7 @@ This solution shows an example of how to write an unary function in point-
 free style. -}
 ```
 
-> **EA-3:** O-47, HO-48, HO-49, HO-50, HO-51, HO-52,
-HO-53
+> [**EA-3:** O-47, HO-48, HO-49, HO-50, HO-51, HO-52, HO-53](AE3.hs)
 
 ---
 ### Listas Infinitas
@@ -732,6 +739,7 @@ head uns = head (1:uns) = 1
 length uns = length (1:uns) = 1 + length uns = 1 + length (1:uns) = 1 + (1 + length uns) = ... não termina
 ```
 
+---
 ---
 
 ## 5. User-defined types
@@ -759,7 +767,7 @@ type Pair a = (a,a)
 type HashMap k v = [(k,v)]
 ```
 
-> **EA-4:** UT-3, UT-4
+> [**EA-4:** UT-3, UT-4](AE4.hs)
 
 ---
 
@@ -829,7 +837,7 @@ Prelude > data MyList a = List a ( MyList a) | EmptyList
   (List 4 (List 6 EmptyList )) :: Num a => MyList a
 ```
 
-> **EA-4:** UT-6, UT-7, UT-8
+> [**EA-4:** UT-6, UT-7, UT-8](AE4.hs)
 
 ---
 
@@ -915,6 +923,83 @@ Prelude > month(d)
 6
 ```
 
-> **EA-4:** UT-9
+> [**EA-4:** UT-9](AE4.hs)
 
 ---
+
+### 5.5. Modules
+
+A module is a collection of related definitions, such as functions, types, and typeclasses. Modules help organize code, making it easier to reuse in different projects. Some standard modules in Haskell include `Data.List` and `Data.Char`.
+
+Benefits of Using Modules:
+  - Code Reusability: Avoids duplication by allowing commonly used functions or definitions to be reused in multiple projects.
+
+**Basic Syntax for Importing a Module**:
+```haskell
+import <module name>
+
+import Data.Char
+``` 
+The import statement is used to bring a module’s definitions into scope, making them available in your source code or in the interactive console.
+
+**Selective Importing**: You can also import only specific functions, types, or typeclasses from a module to keep the namespace clean.
+```haskell
+import <module name> (<definition 1>, <definition 2>)
+
+import Data.List (nub , sort)
+```
+
+**Defining Custom Modules**: Users can create their own modules by defining them at the beginning of a source code file. You can specify what to export by listing the functions, types, or constructors you want to make available to other files.
+```haskell
+module <module name> (<definition 1, definition 2,...)where
+
+module Shape (
+Shape , -- export the data type
+Circle , Rectangle -- export the value constructors
+area -- export the function
+) where
+```
+
+> [**EA-5:** UT-11](AE5.hs)
+
+---
+### 5.6. Case study 1: Syntax trees
+
+Syntax trees represent expressions in a structured, hierarchical form. Each node in a syntax tree represents an operator and has at least one child, while leaves represent constant values and have no children.
+
+`` (+) 2 3 * (negate 169 `div` 13) ``
+
+In a syntax tree, operators like `+`, `*`, and `div` are represented as nodes, and values like `2`, `3`, `13` and `169` are the leaves of the tree.
+
+Here's a visualization of the expression as a syntax tree:
+
+![alt text](assets/image3.png)
+
+> [**EA-5:** UT-12, UT-13, UT-14](AE5.hs)
+---
+### 5.7. Case study 2: Binary search trees
+
+A **Binary Search Tree** (**BST**) is a tree data structure where each node has up to two children and contains a key from a type that supports the `<` operator (i.e., a type that is an instance of Ord). Each node has:
+  - **Left Child**: Contains only keys smaller than the node’s key.
+  - **Right Child**: Contains only keys greater than the node’s key.
+
+In a BST, keys are stored in an ordered way, allowing efficient searching, insertion, and deletion. Each subtree of a node is itself a BST, and it is assumed that all keys in the tree are unique. Leaves (nodes without children) do not contain any data.
+
+![alt text](assets/image4.png)
+
+---
+
+### 5.8. Case study 3: AVL trees
+
+
+
+> [**EA-5:** UT-23, UT-24, UT-25, UT-26, UT-27, UT-28](AE5.hs)
+
+---
+---
+
+## 6. Interactive programs
+
+### 6.1. Standard I/O
+
+> [**EA-5:** IP-4, IP-6, IP-7, IP-8](AE5.hs)
