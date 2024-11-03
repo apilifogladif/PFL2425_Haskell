@@ -113,11 +113,11 @@ In Haskell, there is not iteration, namely `for` and `while` cycles. To execute 
 
 ### 2.1. Elementary types
 The type of any expression or function can be checked in GHCI using the `:type` command (or `:t` , for short). Examples:
-```haskell
+```bash
 Prelude > :type True
 True :: Bool
 ```
-```haskell
+```bash
 Prelude > :type 'a'
 'a' :: Char
 ```
@@ -140,7 +140,7 @@ A tuple is a sequence of elements with a fixed size. The elements do not have to
 
 Tuples with one element do not exist as they have the type of the actual element.There is a single type for a tuple with zero elements, the unit type ().
 
-```haskell
+```bash
 Prelude > :type (True ,'a')
 
 (True ,'a') :: (Bool , Char)
@@ -291,7 +291,7 @@ Lists in Haskell can be defined using various range formats:
   - Assumes a step of `1`.
 
 **Examples:**
-```haskell
+```bash
 Prelude > [1..]
 [1,2,3,4,5,6,7,8,9,10...]
 Prelude > [1..5]
@@ -312,7 +312,7 @@ Prelude > [0.1, 0.2 .. 1]
 
 - When using ranges with floating-point values, be cautious of numeric imprecision.
 - Elements of a list range must belong to a type that is an instance of the Enum typeclass:
-```haskell
+```bash
 Prelude > f a b = [a .. b]
 Prelude > :t f
 f :: Enum a => a -> a -> [a]
@@ -321,7 +321,7 @@ f :: Enum a => a -> a -> [a]
 **Lazy Evaluation**
 Haskell handles infinite lists through lazy evaluation, computing values only when needed. For example, using `take` to retrieve the first N elements from an infinite list results in finite computation:
 
-```haskell
+```bash
 Prelude > take 5 [1..]
 [1,2,3,4,5]
 ```
@@ -372,13 +372,13 @@ divisores n = [x | x<-[1..n], n‘mod‘x==0]
 **Examples:**
 
 1. **Basic List Comprehension**:
-    ```haskell
+    ```bash
     Prelude > [x^2 | x <- [1..10]]
     [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
     ```
 
 2. **Using Guards**:
-    ```haskell
+    ```bash
     Prelude > [x^2 | x <- [1..10], odd x]
     [1, 9, 25, 49, 81]
     
@@ -387,7 +387,7 @@ divisores n = [x | x<-[1..n], n‘mod‘x==0]
     ```
 
 3. **Patterns in Generators**:
-    ```haskell
+    ```bash
     Prelude > [x | (x:_) <- [[1, 2], [3, 4]]]
     [1, 3]
     
@@ -402,7 +402,7 @@ Using multiple generators behaves like nested loops: for each value of the leftm
 *Examples:*
 
 1. **Order Matters**:
-    ```haskell
+    ```bash
     Prelude > [(x, y) | x <- [1, 2], y <- "ab"]
     [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]
     
@@ -411,7 +411,7 @@ Using multiple generators behaves like nested loops: for each value of the leftm
     ```
 
 2. **Nested List Comprehension**:
-    ```haskell
+    ```bash
     Prelude > [[x, y] | x <- "ab", y <- x:"ab"]
     ["aa", "aa", "ab", "bb", "ba", "bb"]
     ```
@@ -813,7 +813,7 @@ data Shape = Circle Double Double Double | Rectangle Double Double Double Double
 
 Each value constructor must only be used once in a data declaration. They can be used in two different ways: as functions or in patterns. Examples:
 
-```haskell
+```bash
 Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double
 Prelude > :type Circle
   Circle :: Double -> Double -> Double -> Shape
@@ -831,7 +831,7 @@ Prelude > map (area .( Circle 1.0 2.0)) [1..5]
 The type of the area function is Shape -> Double rather than Circle -> Double , since Shape is the actual type's name, while Circle is the name of one of its value constructors. 
 
 - Unlike type synonyms, type definitions can be recursive.
-```haskell
+```bash
 Prelude > data MyList a = List a ( MyList a) | EmptyList
 *Main > :type (List 4 (List 6 EmptyList ))
   (List 4 (List 6 EmptyList )) :: Num a => MyList a
@@ -845,7 +845,7 @@ Prelude > data MyList a = List a ( MyList a) | EmptyList
 
 Consider the `Shape` type defined in the previous section. To print a shape or compare two shapes one must define that it derives the typeclass Eq, using the `deriving`keyword.
 
-```haskell
+```bash
 Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double
 Prelude > Rectangle 1.0 2.0 3.0 4.0
 <interactive >:2:1: error:
@@ -857,7 +857,7 @@ Prelude > Circle 3 4 5 == Circle 3 5 5
 * In the expression : Circle 3 4 5 == Circle 3 5 5
 In an equation for 'it': it = Circle 3 4 5 == Circle 3 5 5
 ```
-```haskell
+```bash
 Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double deriving (Show ,Eq)
 Prelude > Rectangle 1.0 2.0 3.0 4.0
 Rectangle 1.0 2.0 3.0 4.0
@@ -868,7 +868,7 @@ True
 ```
 
 Other examples:
-```haskell
+```bash
 Prelude > data Tempo = Adagio | Andante | Moderato | Allegro | Presto deriving (Eq ,Ord ,Show ,Enum)
 
 -- Ord
@@ -887,7 +887,7 @@ Prelude > [Presto , Allegro ..]
 ```
 
 For types T with parameters that derive Ord , a value A is less than a value B if the value constructor of A comes before the one for B in the definition of T. 
-```haskell
+```bash
 Prelude > data Shape = Circle Double Double Double | Rectangle Double Double Double Double deriving (Eq ,Ord)
 Prelude > Circle 1 2 3 < Rectangle 1 2 3 4
 True
@@ -905,7 +905,7 @@ True
 
 When defining a new type using data , the fields of a value can be given names using the record syntax. If a class with named fields is an instance of Show, then they are printed in a different manner. 
 
-```haslell
+```bash
 Prelude > data Date = Date { day :: Int , month :: Int , year :: Int} deriving (Show)
 Prelude > Date 18 6 2006
 Date {day = 18, month = 6, year = 2006}
@@ -917,7 +917,7 @@ Date {day = 18, month = 6, year = 2006}
 
 It also avoids the need to write "getter" functions, which retrieve a field of a value. 
 
-```haskell
+```bash
 Prelude > let d = Date {day = 18, year = 2006 , month = 6}
 Prelude > month(d)
 6
@@ -976,12 +976,13 @@ Here's a visualization of the expression as a syntax tree:
 ![alt text](assets/image3.png)
 
 > [**EA-5:** UT-12, UT-13, UT-14](AE5.hs)
+
 ---
 ### 5.7. Case study 2: Binary search trees
 
 A **Binary Search Tree** (**BST**) is a tree data structure where each node has up to two children and contains a key from a type that supports the `<` operator (i.e., a type that is an instance of Ord). Each node has:
-  - **Left Child**: Contains only keys smaller than the node’s key.
-  - **Right Child**: Contains only keys greater than the node’s key.
+  - **Left Child**: Contains only keys smaller than the node's key.
+  - **Right Child**: Contains only keys greater than the node's key.
 
 In a BST, keys are stored in an ordered way, allowing efficient searching, insertion, and deletion. Each subtree of a node is itself a BST, and it is assumed that all keys in the tree are unique. Leaves (nodes without children) do not contain any data.
 
@@ -991,7 +992,44 @@ In a BST, keys are stored in an ordered way, allowing efficient searching, inser
 
 ### 5.8. Case study 3: AVL trees
 
+A function to look for a value in a arbitrary binary search tree (with n elements) has a worst-case temporal complexity of O(n). It occurs if the height of the tree is equal to n, as shown below:
 
+![alt text](assets/image5.png)
+
+To address this, AVL trees, a type of self-balancing (particular case of a BST that ensures it remains "balanced" after
+inserting and removing keys) BST named after its inventors (Adelson-Velsky and Landis), are used to keep the tree balanced. AVL trees ensure that for every node, the heights of its left and right subtrees differ by at most one unit (height invariant).
+
+The figure below presents an example of a tree that violates this
+invariant: the node with key 6 has a left child with a height of 2 and right child with
+a height of 0 (right subtree is a leaf).
+
+![alt text](assets/image6.png)
+
+If a node in an AVL tree becomes unbalanced (meaning a height difference of ±2 between its subtrees), a rebalancing operation is performed. Rebalancing is achieved by applying left and right rotations to specific nodes, which rearranges the nodes without violating the BST property. Four distinct unbalance scenarios (two for +2 balance and two for -2 balance) can occur, each with a corresponding rotation to restore balance.
+
+![alt text](assets/image7.png)
+
+![alt text](assets/image8.png)
+
+The scenarios with a balance of -2 are symmetrical.
+Due to the height invariant, an AVL tree with nn nodes has a maximum height of approximately log⁡(n). This results in O(log⁡(n)) complexity for lookup, insertion, and deletion.
+The AVL tree type in Haskell is defined similarly to a regular BST. The contains and smallest functions are also identical to those for a regular BST:
+
+```haskell
+data AVLTree a = Empty
+                | Node ( AVLTree a) a ( AVLTree a)
+                deriving (Show ,Eq)
+contains :: (Eq a, Ord a) => a -> AVLTree a -> Bool
+contains a Empty = False
+contains a (Node t1 v t2)
+    | (a == v) = True
+    | (a < v) = contains a t1
+    | otherwise = contains a t2
+smallest :: AVLTree a -> Maybe a
+smallest Empty = Nothing
+smallest (Node Empty v t2) = Just v
+smallest (Node t1 v t2) = smallest t1
+```
 
 > [**EA-5:** UT-23, UT-24, UT-25, UT-26, UT-27, UT-28](AE5.hs)
 
@@ -1002,4 +1040,114 @@ In a BST, keys are stored in an ordered way, allowing efficient searching, inser
 
 ### 6.1. Standard I/O
 
+Haskell programs interact with the console using standard input (stdin) for reading data and standard output (stdout) for writing data. By default, **stdin** is connected to the keyboard, and **stdout** is connected to the text terminal.
+Relevant Prelude functions for input/output on the console:
+
+| Function   | Comment                                                                                     |
+|------------|---------------------------------------------------------------------------------------------|
+| `putChar`  | Writes a character on the stdout.                                                           |
+| `putStr`   | Writes a string on the stdout.                                                              |
+| `putStrLn` | Writes a string followed by a newline (`'\n'`) on the stdout.                               |
+| `print`    | Prints a value (such as an `Int`) on the stdout.                                            |
+| `getChar`  | Reads a character from the stdin. Only returns after a newline is read.                     |
+| `getLine`  | Reads text from the console until a newline is read from the stdin.                         |
+| `getContents` | Reads all text from the console until an end-of-file (EOF) character is read from the stdin. |
+| `return`   | Returns an empty action with type `IO ()`.                                                  |
+
+The end-of-file (`EOF`) character can be written on the console by typing `CTRL+D` (on Unix-based systems) or `CTRL+Z` (on Windows).
+
+To create a Haskell program with I/O, define an `IO ()` function (like `main`) that performs side effects. The function `main :: IO ()` represents an action with no return value and is executed when the program runs.
+
+Example code (`printHi.hs`):
+
+```haskell
+printHi :: IO ()
+printHi = putStrLn "Hi!"
+main = putStrLn "Hello, world!"
+```
+
+One can call main using the GHCi or compile the file and then run it:
+```bash
+$ ghc printHi.hs
+[1 of 1] Compiling Main     ( printHi.hs, printHi.o )
+Linking printHi.exe ...
+$ ./printHi
+Hello, world!
+```
+
+Unlike regular functions, one does not usually specify the type of main, which has the type declaration: `main :: IO ()` . Thus, main is a function that takes no arguments and returns a value of the type `IO()` , which represents an IO (input/output) action with nothing inside it.
+
+An IO action with type `IO` t is an entity that, when executed performs input/output and returns a value with type t. Examples:
+- `putChar` has the type `String -> IO ()` . It receives a Char and returns an action responsible for printing it on the console, so this action has no need to hold a value.
+- `getChar`, on the other hand, has the type `IO Char` . It takes no arguments and returns an action responsible for asking the user for a character which it can then return.
+
+In Haskell, you can execute multiple I/O actions in sequence using `do`-blocks.
+
+```haskell
+hello :: IO ()
+hello = do
+    name <- getLine
+    putStrLn $ "Hello, " ++ name ++ "!"
+```
+This hello function performs two IO actions:
+  1. It reads a line from the keyboard and binds it to name.
+  2. It then prints name to the console with a greeting.
+
+Inside a `do`-block:
+- `x <- action` runs the action and binds its result to `x`.
+- `return` creates an `IO` action with a specified value but doesn't end execution as in other languages.
+
+```haskell
+funcX :: IO String
+funcX = do
+  return ()
+  return "hello"
+  return "123"
+```
+
+When funcX is executed, it only prints "123" since the function returns an IO action with a string containing "123". The string is only printed when the IO action is evaluated, not when it is created
+
+`return` is like the opposite of `<-`: `return` receives a value x and creates IO action that holds x, while `x <- <action>` extracts the x value of an action. 
+```haskell
+x <- return y  <=> x = y
+```
+
+`Let` bindings can also be used inside `do`-blocks. Unlike in pure Haskell code, the "in" is not needed. Example:
+
+```haskell
+testLet :: IO ()
+testLet = do
+  x <- getLine
+  let str = "A␣":x
+  printStrLn str
+```
+
+In Haskell, values can be converted between types using the `show` and `read` functions:
+- `show`: Converts values (e.g., integers or lists) to strings. Only types in the `Show` typeclass support this.
+- `read`: Parses a string into a specific value type, as long as it belongs to the `Read` typeclass.
+
+```bash
+Prelude > show 3
+"3"
+Prelude > show [1,2,3]
+"[1,2,3]"
+Prelude > read "3" :: Int
+3
+Prelude > read "[True ,False]" :: [Bool]
+[True ,False]
+Prelude > read "[1,2,3.5]" :: [Double]
+[1.0,2.0,3.5]
+```
+
+- When using `read`, a type annotation is required if Haskell cannot infer the type. For example, `"3"` could be interpreted as an `Int`, `Integer`, or `Double`, so specifying the type ensures correct interpretation.
+
+A sample module `IOUtils` provides useful functions for command-line applications, including functions to:
+  - **Clear the screen**: Erase console output.
+  - **Draw at specific positions**: Position text output at given coordinates.
+  - **Change text color**: Adjust foreground and background text colors.
+  - **Pause execution**: Wait for a specified time.
+
+
 > [**EA-5:** IP-4, IP-6, IP-7, IP-8](AE5.hs)
+
+---
