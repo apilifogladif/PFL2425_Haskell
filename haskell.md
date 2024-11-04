@@ -2,58 +2,50 @@
 
 Livro: [Learning Hakell](https://moodle2425.up.pt/pluginfile.php/95817/mod_resource/content/21/Learning%20Haskell%20by%20Solving%20Problems.pdf)
 
-## Programação Funcional
+## Functional Programming
 
-Programas em C ou Java são normalmente *imperativos*: sequências de comandos que modificam variáveis em memória.
+Programs in C or Java are usually imperative: sequences of commands that modify variables in memory.
 
-Num programa puramente funcional **nunca modificamos variáveis**: só aplicamos funções.
+In a purely functional program, we **never modify variables**: we only apply functions.
 
-### Vantagens da programação funcional
-- Programas mais concisos
-- Próximos duma especificação matemática
-- Mais enfoque na análise do problema e menos em “debugging”
-- Ajuda a programar melhor em qualquer linguagem!
-- Mais modularidade: decompor problemas em componentes pequenas e re-utilizáveis
-- Garantias de correção: demonstrações de correção usando provas matemáticas, maior facilidade em fazer testes automáticos
-- Concorrencia/paralelismo: a ordem de execução não afecta os resultados
+### Example of a Functional Program in Haskell
 
-### Desvantagens da programação funcional
-- Os compiladores e interpretadores são mais complexos
-- Difícil prever os custos de execução (tempo/espaço)
-- Alguns programas de baixo-nível necessitam de controlo preciso de tempo/espaço
-- Alguns algoritmos são mais eficientes quando implementados de forma imperativa
+```haskell
+main = print (sum (map (^2) [1..10]))
+```
 
-### Comandos do interpretador
+- [1..10] is the sequence of integers from 1 to 10
+- map (^2) calculates the square of each value
+- sum sums the sequence
+- print prints the result
+
+### Advantages of Functional Programming
+
+- More concise programs
+- Closer to a mathematical specification
+- More focus on problem analysis and less on “debugging”
+- Helps improve programming skills in any language!
+- Greater modularity: breaks problems into small, reusable components
+- Correction guarantees: allows for proof-based correctness and simplifies automated testing
+- Concurrency/parallelism: the execution order does not affect the results
+
+### Disadvantages of Functional Programming
+
+  - Compilers and interpreters are more complex
+  - Hard to predict execution costs (time/space)
+  - Some low-level programs require precise control over time/space
+  - Certain algorithms are more efficient when implemented imperatively
+
+### Interpreter Commands
 | Comand | Abrev. | Meaning |
 |--------|--------|---------|
-| `:load ficheiro` | `:l` | carregar um ficheiro |
-| `:reload` | `:r` | re-carregar modificações |
-| `:edit` | | editar o ficheiro atual |
-| `:set editor prog` | | definir o editor |
-| `:type expr` | `:t` | mostrar o tipo duma expressão |
-| `:help` | | obter ajuda |
-| `:quit` | `:q` | terminar a sessão |
-
-### Notas
-- Os nomes de funções e variáveis devem começar por letras mínusculas e podem incluir letras, dígitos, sublinhados e apóstrofes.
-- A indentação indica o âmbito das declarações:
-```haskell
-a = b+c
-  where b = 1
-        c = 2
-d = a*2
-```
-corresponde a:
-```haskell
-a = b+c
-  where {b = 1;
-        c = 2}
-d = a*2
-```
-- Todas as definições num mesmo âmbito devem começar na mesma coluna.
-
-![alt text](assets/image.png)
-
+| `:load ficheiro` | `:l` | load a file |
+| `:reload` | `:r` | reload modifications |
+| `:edit` | | edit the current file |
+| `:set editor prog` | | set the editor |
+| `:type expr` | `:t` | show the type of an expression |
+| `:help` | | get help |
+| `:quit` | `:q` | end the session |
 
 ---
 ---
@@ -79,6 +71,33 @@ d = a*2
 > [**EA-1:** IN-3, IN-4](EA/EA1.hs)
 
 ---
+### Syntax
+
+- Function arguments are separated by spaces.
+- Function application has higher precedence than any operator.
+
+| Haskell	| Usual Notation |
+|---------|----------------|
+| `f x`	| `f(x)` |
+| `f (g x)`	| `f(g(x))` |
+| `f (g x) (h x)`	| `f(g(x), h(x))` |
+| `f x y + 1`	| `f(x, y) + 1` |
+| `f x (y+1)`	| `f(x, y + 1)` |
+| `sqrt x + 1`	| `√x + 1` |
+| `sqrt (x + 1)`	| `√(x + 1)` |
+
+- An operator can be used as a function by enclosing it in parentheses.
+- Conversely, a function can be used as an operator by enclosing it in backticks.
+
+| Haskell	| Equivalent | 
+|---------|------------|
+| `(+) x y`	| `x + y` | 
+| `(*) y 2`	| `y * 2` | 
+| `` x \mod` 2` `` | `mod x 2` | 
+| `` f x \div` n` `` | `div (f x) n` | 
+
+
+---
 ### 1.3. Simple functions
 
 In Haskell, since functions behave like any other entity, they are defined using the same syntax as variables. In fact, variables (in the sense as those used in imperative languages) are a particular case of a function with no arguments.
@@ -88,15 +107,82 @@ The general syntax to define a function is:
 
 Valid function and argument names begin with a lowercase letter, followed by letters, numbers, underscores (example: func_2 ) and apostrophes ( func' ). The names used cannot be any of the following reserved keywords: case class data default deriving do else if import in infix infixl infixr instance let module newtype of then type where .
 
+#### Notes
+- Function and variable names must start with lowercase letters and can include letters, digits, underscores, and apostrophes.
+- Indentation indicates the scope of declarations
+
+```haskell
+a = b+c
+  where b = 1
+        c = 2
+d = a*2
+```
+corresponds to:
+```haskell
+a = b+c
+  where {b = 1;
+        c = 2}
+d = a*2
+```
+- All definitions in the same scope must start in the same column.
+
+![alt text](assets/image.png)
+
 > [**EA-1:** IN-6](EA/EA1.hs)
 
 ---
 ### 1.4. Conditional structures
 There are various ways of writing conditional structures in Haskell, which, given a condition, determine which expression will be computed. The four main conditional structures are:
 - if-then-else expressions.
+```haskell
+absoluto :: Float -> Float
+absoluto x = if x>=0 then x else -x
+
+-- Note1: in haskell, 'if...then...else' is an expression not a command
+-- Note2: 'else' is mandatory
+```
 - guards.
+```haskell
+absoluto :: Float -> Float
+absoluto | x>=0 = x
+         | otherwise = -x
+
+-- Note: In Haskell, local definitions cover all alternatives if the where clause is aligned with the guards. This allows you to define auxiliary functions or variables .
+
+raizes :: Float -> Float -> Float -> [Float]
+raizes a b c
+    | delta>0 = [(-b+sqrt delta)/(2*a),
+                 (-b-sqrt delta)/(2*a)]
+    | delta==0 = [-b/(2*a)]
+    | otherwise = []
+    where delta = b^2 - 4*a*c
+```
 - pattern matching.
+```haskell
+(&&) :: Bool -> Bool -> Bool
+True && True = True
+True && False = False
+False && True = False
+False && False = False
+
+-- Note:
+x && x = x -- ERROR, we cannot repeat variables in patterns
+x && y | x==y = x -- OK
+```
 - case expressions.
+```haskell
+null :: [a] -> Bool
+null xs = case xs of
+            [] -> True
+            (_:_) -> False
+
+equivalent to
+
+null :: [a] -> Bool
+null xs = case xs of
+            [] -> True
+            _ -> False
+```
 
 > [**EA-1:** IN-13](EA/EA1.hs)
 
@@ -105,6 +191,68 @@ There are various ways of writing conditional structures in Haskell, which, give
 In Haskell, there is not iteration, namely `for` and `while` cycles. To execute a fragment of code a certain number of times until a condition is met, one must use recursion, where a function's expression contains a call to itself.
 
 > [**EA-2:** IN-17, IN-18](EA/EA2.hs)
+
+---
+
+### Lambda Expressions
+
+In Haskell, we can define an anonymous function (i.e., a function without a name) using a lambda expression. Lambda expressions:
+  - Allow the definition of functions whose results are other functions.
+  - Help avoid naming short functions.
+
+Here's a simple example of a lambda function:
+```haskell
+\x -> 2*x + 1  -- A function that corresponds to 2x + 1 for each x.
+```
+You can use this lambda expression like this:
+```bash
+> (\x -> 2*x+1) 1
+3
+> (\x -> 2*x+1) 3
+7
+```
+You can also define named functions using lambda expressions. For example:
+```haskell
+soma x y = x + y
+
+-- This is equivalent to:
+
+soma = \x -> (\y -> x + y)
+```
+Lambda expressions are particularly useful when working with higher-order functions. For instance, instead of defining a separate function to square numbers, you can use a lambda expression directly:
+```haskell
+quadrados = map f [1..10]
+    where f x = x^2
+
+-- We can write this as:
+
+quadrados = map (\x -> x^2) [1..10]
+```
+
+---
+### Operators and Sections
+
+Expressions of the form `(x ⊗)` and `(⊗ x)` are called **sections**. They define the resulting function by applying one of the operator's arguments.
+
+Here are a couple of examples using sections:
+```bash
+> (+1) 2
+3
+> (/2) 1
+0.5
+```
+In these examples:
+  - ( + 1 ) is a section that takes a number and adds 1 to it.
+  - ( / 2 ) is a section that takes a number and divides it by 2.
+
+For instance, consider the following function definition:
+```haskell
+quadrados = map (\x -> x^2) [1..10]
+```
+This can be expressed more succinctly using a section:
+```haskell
+quadrados = map (^2) [1..10]
+```
 
 ---
 ---
@@ -205,9 +353,26 @@ Lists can be defined in various ways:
 
 <p align="center">Table 2.3 Some Prelude functions for lists</p>
 
+**Notes:**
+```bash
+> head []
+ERRO
+```
+```haskell
+head x:_ = x    -- ERRO
+head (x:_) = x  -- OK
+```
+```bash
+> init [1]
+[]
+> init []
+*** Exception: Prelude.init: empty list
+```
+
 There is also a module with more useful functions to work with lists, Data.List. `import Data.List`
 
 > [**EA-1:** FT-9, FT-10, FT-11](EA/EA1.hs)
+
 > [**EA-2:** FT-14, FT-18, FT-19](EA/EA2.hs)
 
 ---
@@ -229,6 +394,53 @@ Certain functions operate over a certain group of types but not over every singl
 
 Simplified hierarchy of the **most common** typeclasses and types in Haskell:
 ![alt text](assets/image2.png)
+
+```haskell
+1 :: Int
+1 :: Float
+1 :: Num a => a -- tipo mais geral
+
+3.0 :: Float
+3.0 :: Double
+3.0 :: Fractional a => a -- tipo mais geral
+
+1/3 :: Float
+(1 + 1.5 + 2) :: Float
+```
+
+#### Mixing Numeric Types
+
+```haskell
+media xs = sum xs / length xs
+```
+If you try to compile this code, you might get an error like:
+```bash
+Could not deduce (Fractional Int) ...
+```
+
+**Problem:**
+```haskell
+(/) :: Fractional a => a -> a -> a -- fractional division
+length xs :: Int -- returns an Int, which is not a fractional type
+```
+
+**Solution:**
+```haskell
+media xs = sum xs / fromIntegral (length xs)   -- use an explicit conversion
+```
+
+`fromIntegral` converts any integer type to any other numeric type, allowing length xs to be used in fractional operations.
+
+#### Type Annotations
+
+In Haskell, we can write function definitions and let the interpreter infer their types. However, it’s generally recommended to always annotate function definitions with their types.
+
+**Benefits** of Type Annotations:
+  - Documentation: Makes the purpose and expected inputs/outputs of the function clearer.
+  - Guidance: Helps guide the process of writing function definitions by clarifying expected types.
+  - Error Clarity: Can sometimes make error messages more understandable by providing context on expected types.
+
+In Haskell, it’s often easier to start with a concrete type and then generalize as you refine the function. This approach allows you to test the function with a specific type to ensure it works correctly before adapting it to operate over a broader range of types.
 
 ---
 ### 2.5. Type variables
@@ -304,7 +516,7 @@ Prelude > [1,3..]
 [1,3,5,7,9,11,13,15,17,19...]
 Prelude > ['a'..]
 "abcdefghijklmnopqrstuvwxyz{|}~\DEL\128\129..."
-Prelude > [0.1, 0.2 .. 1]
+Prelude > [0.1,0.2..1]
 [0.1, 0.2, 0.30000000000000004, 0.4, 0.5, 0.6, 0.7000000000000001, 0.8, 0.9, 1.0]
 ```
 
@@ -334,6 +546,7 @@ Working with infinite lists separates the logic of generating a list from proces
 The previous chapter introduced some examples of recursive functions with lists. This section contains exercises to implement recursive functions with lists that return new lists.
 
 > [**EA-2:**  LI-13, LI-14, LI-15, LI-16, LI-17, LI-18, LI-20](EA/EA2.hs)
+
 > [**EA-4:** LI-10](EA/EA4.hs)
 
 ---
@@ -361,12 +574,12 @@ error: Variable not in scope: x
 - **Guards**: Conditions that must be met for an instance of the pattern to be included in the output list. They function as filters.
 ```haskell
 -- os inteiros x tal que x está entre 1 e 10 e x é par.
-> [x | x<-[1..10], x‘mod‘2==0]
+> [x | x<-[1..10], x /`mod/` 2==0]
 [2,4,6,8,10]
 
 -- divisores de um numero inteiro positivo
 divisores :: Int -> [Int]
-divisores n = [x | x<-[1..n], n‘mod‘x==0]
+divisores n = [x | x<-[1..n], n /`mod/` x==0]
 ```
 
 **Examples:**
@@ -387,6 +600,8 @@ divisores n = [x | x<-[1..n], n‘mod‘x==0]
     ```
 
 3. **Patterns in Generators**:
+    - determina quais os valores das variáveis no padrão
+    - e a ordem pela qual os valores são gerados
     ```bash
     Prelude > [x | (x:_) <- [[1, 2], [3, 4]]]
     [1, 3]
@@ -395,33 +610,212 @@ divisores n = [x | x<-[1..n], n‘mod‘x==0]
     [(1, 1), (2, 2), (3, 3)]
     ```
 
-**Multiple Generators:**
+    **Multiple Generators:**
 
-Using multiple generators behaves like nested loops: for each value of the leftmost generator, all combinations of values from the generators to the right are produced. Changing the order of generators affects the resulting list.
+    Using multiple generators behaves like nested loops: for each value of the leftmost generator, all combinations of values from the generators to the right are produced. Changing the order of generators affects the resulting list.
 
-*Examples:*
+    *Examples:*
 
-1. **Order Matters**:
-    ```bash
-    Prelude > [(x, y) | x <- [1, 2], y <- "ab"]
-    [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]
-    
-    Prelude > [(x, y) | y <- "ab", x <- [1, 2]]
-    [(1, 'a'), (2, 'a'), (1, 'b'), (2, 'b')]
-    ```
+    1. **Order Matters**:
+        ```bash
+        Prelude > [(x, y) | x <- [1, 2], y <- "ab"]
+        [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]
+        
+        Prelude > [(x, y) | y <- "ab", x <- [1, 2]]
+        [(1, 'a'), (2, 'a'), (1, 'b'), (2, 'b')]
+        ```
 
-2. **Nested List Comprehension**:
-    ```bash
-    Prelude > [[x, y] | x <- "ab", y <- x:"ab"]
-    ["aa", "aa", "ab", "bb", "ba", "bb"]
-    ```
+    2. **Nested List Comprehension**:
+        ```bash
+        Prelude > [[x, y] | x <- "ab", y <- x:"ab"]
+        ["aa", "aa", "ab", "bb", "ba", "bb"]
+        ```
+
+    3. **Dependencies**
+        The values used in generators can depend on previous values but not on subsequent ones.
+        ```bash
+        > [(x,y) | x<-[1..3], y<-[x..3]]
+        [(1,1),(1,2),(1,3),(2,2),(2,3),(3,3)]
+        > [(x,y) | y<-[x..3], x<-[1..3]]
+        error: Variable not in scope: x
+        ```
 
 **Conclusion**
 
 List comprehensions provide a powerful and expressive way to create and manipulate lists in Haskell, allowing for concise code that can replace more verbose looping constructs.
 
 > [**EA-2:** LI-29, LI-31, LI-32, LI-33, LI-35, LI-36, LI-39](EA/EA2.hs)
+
 > [**EA-4:** LI-34, LI-37, LI-38, LI-40, LI-41, LI-42](EA/EA4.hs)
+
+---
+
+### `zip` function
+
+The `zip` function in Haskell combines two lists into a list of pairs containing corresponding elements.
+
+```haskell
+zip :: [a] -> [b] -> [(a,b)]
+```
+
+Example:
+```bash
+> zip [’a’,’b’,’c’] [1,2,3,4]
+[(’a’,1), (’b’,2), (’c’,3)]
+```
+
+If the lists have different lengths, the result will have the length of the shorter list.
+
+**Using `zip` to Find Indices**
+
+You can also use `zip` to combine elements of a list with their indices. For instance, if you want to find the indices of occurrences of a value in a list:
+```haskell
+indices :: Eq a => a -> [a] -> [Int]
+indices x ys = [i | (y,i)<-zip ys [0..n], x==y]
+where n = length ys - 1
+```
+```bash
+> indices ’a’ [’b’,’a’,’n’,’a’,’n’,’a’]
+[1,3,5]
+```
+This function generates a list of indices where the value x occurs in the list ys.
+
+**Using `zip` and `tail` for Consecutive Pairs**
+
+You can also use `zip` together with `tail` to create a list of consecutive pairs from a list:
+
+```haskell
+pares :: [a] -> [(a,a)]
+pares xs = zip xs (tail xs)
+
+xs = [x1, x2, ..., x_n-1, x_n]
+tail xs = [x2, x3, ..., x_n]
+zip xs (tail xs) = [(x1,x2), (x2,x3), ..., (x_n-1, x_n)]
+```
+
+In this case:
+  - xs could be [x1, x2, ..., x_n]
+  - tail xs would be [x2, x3, ..., x_n]
+  - The zip function combines these two lists into pairs: [(x1, x2), (x2, x3), ..., (x_n-1, x_n)]
+
+```bash
+> pares [1,2,3,4]
+[(1,2),(2,3),(3,4)]
+> pares [’a’,’b’,’b’,’a’]
+[(’a’,’b’),(’b’,’b’),(’b’,’a’)]
+> pares [1,2]
+[(1,2)]
+> pares [1]
+[]
+```
+
+**Using `zip` to Count Consecutive Equal Elements**
+
+You can also define a function to count the number of consecutive elements that are equal in a list:
+
+```haskell
+paresIguais :: Eq a => [a] -> Int
+paresIguais xs = length [(x, x') | (x, x') <- zip xs (tail xs), x == x']
+```
+```bash
+> paresIguais [1, 1, 2, 2, 3]
+2
+
+> paresIguais ['a', 'b', 'b', 'a']
+1
+```
+This function effectively counts how many times adjacent elements in the list are equal by leveraging the `zip` function.
+
+### String
+
+In Haskell, the String type is predefined as a synonym for a list of characters:
+
+```haskell
+type String = [Char] -- definido no prelúdio-padrão
+```
+
+For example, the string `"abba"` is equivalent to the list of characters `['a', 'b', 'b', 'a']`. 
+
+Since strings are essentially lists of characters, you can use list functions directly on them.
+
+Exemplos:
+```bash
+> length "abcde"
+5
+
+> take 3 "abcde"
+"abc"
+
+> zip "abc" [1,2,3,4]
+[(’a’,1),(’b’,2),(’c’,3)]
+```
+
+You can also use list comprehensions with strings. For example, to count the number of uppercase letters in a string:
+```haskell
+contarLetras :: String -> Int
+contarLetras txt = length [c | c<-txt, c>=’A’ && c<=’Z’]
+```
+
+Many specialized functions related to characters are defined in modules, which need to be imported to use their functions. For example, the `Data.Char` module includes several useful functions:
+```haskell
+isUpper :: Char -> Bool
+  -- testar se é letra maiúscula
+isLower :: Char -> Bool
+  -- testar se é letra minúscula
+isLetter :: Char -> Bool
+  -- testar se é letra (qualquer)
+toUpper :: Char -> Char
+  -- converter para maiúscula (ou for letra)
+toLower :: Char -> Char
+  -- converter para minúscula (se for letra)
+```
+```haskell
+import Data.Char
+
+countLetters :: String -> Int
+countLetters xs = length [x | x<-xs, isLetter x]
+
+stringToUpper :: String -> String
+stringToUpper xs = [toUpper x | x<-xs]
+```
+```bash
+> countLetters "Abba123"
+4
+> stringToUpper "Abba123"
+"ABBA123"
+```
+
+### List Comprehensions vs. Recursive Functions
+
+Any definition using list comprehensions can be translated into recursive functions.
+
+However, recursive definitions are often more general than those using list comprehensions.
+
+*Example 1*: Listing Squares
+```haskell
+-- versão com lista em compreensão
+listarQuadrados n = [i^2 | i<-[1..n]]
+-- versão recursiva
+listarQuadrados’ n = quadrados 1
+where
+quadrados i
+| i<=n = i^2 : quadrados (i+1)
+| otherwise = []
+```
+
+*Example 2*: Summing Squares
+```haskell
+-- versão com lista em compreensão
+somarQuadrados n = sum [i^2 | i<-[1..n]]
+-- versão recursiva sem listas
+somarQuadrados’ n = quadrados 1
+where
+quadrados i
+| i<=n = i^2 + quadrados (i+1)
+| otherwise = 0
+```
+
+This shows how list comprehensions can sometimes be transformed into more efficient recursive functions that do not require intermediate lists.
 
 ---
 ---
@@ -640,6 +1034,7 @@ f = sum . map (^2) . filter even
 ```
 
 > [**EA-3:** HO-13, HO-14, HO-15, HO-16, HO-17, HO-18, HO-22, HO-23](EA/EA3.hs)
+
 > [**EA-4:** HO-19, HO-24](EA/EA4.hs)
 
 ---
@@ -723,7 +1118,7 @@ free style. -}
 > [**EA-3:** O-47, HO-48, HO-49, HO-50, HO-51, HO-52, HO-53](EA/EA3.hs)
 
 ---
-### Listas Infinitas
+### Infinite Lists
 - Because of lazy evaluation, lists are calculated as needed and only as far as necessary.
 
 ```haskell
@@ -878,7 +1273,7 @@ Prelude > Adagio >= Moderato
 False
 
 -- Enum
-Prelude > [ Adagio ..]
+Prelude > [Adagio ..]
 [Adagio ,Andante ,Moderato ,Allegro , Presto]
 Prelude > [Adagio , Moderato ..]
 [Adagio ,Moderato , Presto ]
@@ -927,6 +1322,140 @@ Prelude > month(d)
 
 ---
 
+### Polimorphismo e sobrecarga
+In functional programming, a definition that works with multiple types is said to have a **polymorphic type**. For example, the function `length` is polymorphic, as it can operate on a list of any type:
+Exemplo: a função length.
+```haskell
+length :: [a] -> Int
+length [] = 0
+length (x:xs) = 1 + length xs
+```
+In object-oriented programming, this is similar to having a **generic type**.
+
+Type classes allow for **operator overloading**, enabling the same operator to have different implementations for different types. For instance, the equality operator (==) can be defined for multiple types:
+```haskell
+(==) :: Int -> Int -> Bool -- tipo Int
+(==) :: Float -> Float -> Bool -- tipo Float
+(==) :: String -> String -> Bool -- tipo String
+...
+(==) :: Eq a => a -> a -> Bool -- tipo mais geral
+```
+
+---
+
+### Instances Declarations
+
+An **instance** declaration defines how a type conforms to a type class. For example, here is the equality instance for Bool (as defined in the standard Prelude):
+```haskell
+instance Eq Bool where
+True == True = True
+False == False = True
+_ == _ = False
+```
+You can also create instances for custom types. For instance, defining equality for the recursive type `Nat`:
+```haskell
+data Nat = Zero | Succ Nat
+instance Eq Nat where
+Zero == Zero = True -- base case
+Succ x == Succ y = x==y -- recursive casa
+_ == _ = False
+```
+Here, the recursive nature of `Nat` requires a recursive definition for equality as well.
+
+---
+
+### Classes Restrictions
+
+Type class constraints enable additional requirements for types within a class. For example, the class `Ord` (total ordering) requires that any type in it also has equality (`Eq`):
+```haskell
+class (Eq a) => Ord a where
+(<), (<=), (>), (>=) :: a -> a -> Bool
+min, max :: a -> a -> a
+```
+
+You can also apply constraints in instance declarations, such as defining equality for lists based on equality of their elements:
+```haskell
+instance (Eq a) => Eq [a] where
+[] == [] = True
+(x:xs) == (y:ys) = x==y && xs==ys
+_ == _ = False -- diferentes
+```
+
+**Example**: `Num` and `Fractional` Classes
+
+The `Num` type class requires `Eq` and `Show` instances and includes basic arithmetic:
+```haskell
+class (Eq a, Show a) => Num a where
+(+), (-), (*) :: a -> a -> a
+negate :: a -> a
+abs, signum :: a -> a
+fromInteger :: Integer -> a
+class (Num a) => Fractional a where
+(/) :: a -> a -> a
+recip :: a -> a
+```
+
+---
+
+### Example: Implementing Rational Numbers
+
+Using type classes, we can create a data type for rational numbers, or fractions. This includes:
+  - Show instance for converting to text
+  - Eq and Ord instances for comparisons
+  - Num and Fractional instances for arithmetic
+
+```haskell
+data Fraction = Frac Integer Integer
+
+num, denom :: Fraction -> Integer
+num (Frac p q) = p
+denom (Frac p q) = q
+```
+
+Define an infix operator `%` to construct rational numbers, allowing for easier representation and automatic normalization:
+
+```haskell
+(%) :: Integer -> Integer -> Fraction
+p % q
+| q==0 = error "%: division by zero"
+| q<0 = (-p) % (-q)
+| otherwise = Frac (p‘div‘d) (q‘div‘d)
+where d = mdc p q
+mdc :: Integer -> Integer -> Integer
+mdc a 0 = a
+mdc a b = mdc b (a‘mod‘b)
+```
+
+Advantages:
+  - **Readability** (e.g., we write 1 % 2 instead of Frac 1 2);
+  - **Encapsulation** of the representation;
+  - **Automatic normalization** of the representation.
+
+```haskell
+-- pré-condição: as frações são normalizadas
+instance Eq Fraction where
+(Frac p q) == (Frac r s) = p==r && q==s
+instance Show Fraction where
+show (Frac p q) = show p ++ (’%’: show q)
+
+instance Num Fraction where
+(Frac p q) + (Frac r s) = (p*s+q*r) % (q*s)
+(Frac p q) * (Frac r s) = (p*r) % (q*s)
+negate (Frac p q) = Frac (-p) q
+fromInteger n = Frac n 1
+```
+
+**Comparison of Fractions:**
+We define one comparison operator (e.g., `<=`), and Haskell will derive the rest:
+```haskell
+instance Ord Fraction where
+(Frac p q) <= (Frac r s) = p*s-q*r<=0
+```
+Os operadores `<`, `>`, `>=` ficam definidos apartir de `<=`, `==` e `/=`.
+
+
+---
+
 ### 5.5. Modules
 
 A module is a collection of related definitions, such as functions, types, and typeclasses. Modules help organize code, making it easier to reuse in different projects. Some standard modules in Haskell include `Data.List` and `Data.Char`.
@@ -951,13 +1480,15 @@ import Data.List (nub , sort)
 
 **Defining Custom Modules**: Users can create their own modules by defining them at the beginning of a source code file. You can specify what to export by listing the functions, types, or constructors you want to make available to other files.
 ```haskell
-module <module name> (<definition 1, definition 2,...)where
+module <module name> (<definition 1, definition 2,...) where
 
 module Shape (
 Shape , -- export the data type
 Circle , Rectangle -- export the value constructors
 area -- export the function
 ) where
+
+module Fraction (Fraction, (%)) where
 ```
 
 > [**EA-5:** UT-11](EA/EA5.hs)
@@ -978,6 +1509,75 @@ Here's a visualization of the expression as a syntax tree:
 > [**EA-5:** UT-12, UT-13, UT-14](EA/EA5.hs)
 
 ---
+
+### Binary Trees
+
+A BST can be represented in haskell as:
+```haskell
+data Tree = Node Tree Tree | Leaf
+```
+
+![alt text](assets/image9.png)
+
+We can associate additional information to tree structures by adding annotations to nodes, leaves, or both. Here are a few examples:
+
+- Nodes annotated with integers:
+`data Tree = Node Int Tree Tree | Leaf`
+
+- Leaves annotated with integers:
+`data Tree = Node Tree Tree | Leaf Int`
+
+- Nodes annotated with integers, leaves with booleans:
+`data Tree = Node Int Tree Tree | Leaf Bool`
+
+Instead of using specific types for annotations, we can generalize the tree structure by parameterizing the annotation types. This approach enables greater flexibility by allowing annotations of any type.
+
+- Nodes annotated with a generic type `a`:
+`data Tree a = Node a (Tree a) (Tree a) | Leaf`
+
+- Leaves annotated with a generic type `a`:
+`data Tree a = Node (Tree a) (Tree a) | Leaf a`
+
+- Nodes annotated with type `a`, leaves with type  :
+`data Tree a b = Node a (Tree a b) (Tree a b) | Leaf b`
+
+This generalized approach lets you create trees with any kind of annotation on nodes and leaves, enhancing reusability and adaptability for various data types.
+
+To **list all the values** in a tree in in-order traversal (infix order), we need to follow these steps:
+  - Traverse the left subtree.
+  - Visit the node itself.
+  - Traverse the right subtree.
+
+In this recursive function, the base case is an empty tree, which returns an empty list.
+
+Here’s how the function is defined in Haskell:
+
+```haskell
+`data Tree a = Node a (Tree a) (Tree a) | Empty`
+
+listar :: Tree a -> [a]
+listar Empty = []
+listar (Node x left right) = listar left ++ [x] ++ listar right
+```
+
+If a binary tree is sorted (meaning it’s a **binary search tree**, or BST), then `listar` will produce the values in ascending order. We can use this property to check if a tree is ordered by verifying that the list produced by `listar` is strictly increasing.
+
+Here’s how the `ordenada` function works:
+  - It lists all values in the tree using listar.
+  - It checks if this list is in ascending order by using a helper function ascendente.
+
+The function in Haskell is defined as follows:
+
+```haskell
+ordenada :: Ord a => Tree a -> Bool
+ordenada tree = ascendente (listar tree)
+  where
+    ascendente [] = True
+    ascendente [_] = True
+    ascendente (x:y:xs) = x < y && ascendente (y:xs)
+```
+
+---
 ### 5.7. Case study 2: Binary search trees
 
 A **Binary Search Tree** (**BST**) is a tree data structure where each node has up to two children and contains a key from a type that supports the `<` operator (i.e., a type that is an instance of Ord). Each node has:
@@ -988,48 +1588,212 @@ In a BST, keys are stored in an ordered way, allowing efficient searching, inser
 
 ![alt text](assets/image4.png)
 
+**Searching for a Value in a Sorted Tree**
+
+To search for a value in a **BST**:
+  1. Compare the target value with the node’s value.
+  2. Recursively search in the left or right subtree depending on the comparison result.
+
+Here is the function procurar in Haskell:
+
+```haskell
+procurar :: Ord a => a -> Tree a -> Bool
+procurar x Vazia = False -- Base case: value not found
+procurar x (No y left right)
+  | x == y    = True       -- Found the value
+  | x < y     = procurar x left -- Search left subtree
+  | otherwise = procurar x right -- Search right subtree
+```
+
+- `Ord a =>` indicates we need the `Ord` class because we’re using comparison operators (`<`, `==`).
+- The base case `procurar x Vazia = False` returns `False` when the tree is empty, meaning the value is not present.
+
+**Inserting a Value into a Sorted Tree**
+To insert a value into a BST:
+  1. Compare the value with each node to decide which subtree to insert into.
+  2. Recursively insert into the left or right subtree as appropriate.
+  3. If the value already exists in the tree, we do not insert it again.
+
+Here’s the function `inserir` in Haskell:
+
+```haskell
+
+inserir :: Ord a => a -> Arv a -> Arv a
+inserir x Vazia = No x Vazia Vazia  -- Insert into an empty tree
+inserir x (No y esq dir)
+  | x == y    = No y esq dir        -- Value already exists; no insertion
+  | x < y     = No y (inserir x esq) dir  -- Insert into left subtree
+  | otherwise = No y esq (inserir x dir)  -- Insert into right subtree
+```
+
+- This function returns a new tree with the value inserted.
+- The tree remains sorted after insertion.
+
+**Building a Tree from a List**
+
+We can build a **BST** from a list of values by inserting each element into an initially empty tree.
+  1. Recursively insert elements from the list.
+  1. Use an empty tree as the starting point.
+
+Here’s how to build a tree from a list using recursion:
+
+```haskell
+construir :: Ord a => [a] -> Tree a
+construir [] = Empty
+construir (x:xs) = inserir x (construir xs)
+```
+
+Alternatively, we can use `foldr` to make the code shorter:
+
+```haskell
+construir :: Ord a => [a] -> Tree a
+construir xs = foldr inserir Empty xs
+```
+
+- `foldr inserir Vazia xs` starts with an empty tree and inserts each element from the list xs.
+- *Note*: While `construir` keeps the tree sorted, it doesn’t balance it. This can lead to unbalanced trees, especially if the list is sorted in ascending or descending order.
+
+*Example of Building a Tree*
+
+For example, calling `construir [3,1,2]` produces the tree:
+
+     2
+    / \
+   1   3
+
+Calling `construir [4,3,2,1]` produces a skewed tree:
+
+4
+ \
+  3
+   \
+    2
+     \
+      1
+
+This tree is **sorted but unbalanced**, which can **slow down operations like search**.
+
 ---
 
 ### 5.8. Case study 3: AVL trees
 
-A function to look for a value in a arbitrary binary search tree (with n elements) has a worst-case temporal complexity of O(n). It occurs if the height of the tree is equal to n, as shown below:
+**Problem with Unbalanced Binary Search Trees (BSTs)**
+
+Searching in a standard BST can have a worst-case complexity of O(n). It occurs if the height of the tree is equal to n, as shown below:
 
 ![alt text](assets/image5.png)
 
-To address this, AVL trees, a type of self-balancing (particular case of a BST that ensures it remains "balanced" after
-inserting and removing keys) BST named after its inventors (Adelson-Velsky and Landis), are used to keep the tree balanced. AVL trees ensure that for every node, the heights of its left and right subtrees differ by at most one unit (height invariant).
+**Introduction to AVL Trees**
 
-The figure below presents an example of a tree that violates this
-invariant: the node with key 6 has a left child with a height of 2 and right child with
-a height of 0 (right subtree is a leaf).
+**AVL trees**, named after inventors Adelson-Velsky and Landis, are **self-balancing BSTs** that automatically maintain balance after insertions and deletions. An AVL tree ensures that for every node, the height difference between its left and right subtrees is at most 1 (known as the height invariant).
+
+An example of an unbalanced node:
 
 ![alt text](assets/image6.png)
 
-If a node in an AVL tree becomes unbalanced (meaning a height difference of ±2 between its subtrees), a rebalancing operation is performed. Rebalancing is achieved by applying left and right rotations to specific nodes, which rearranges the nodes without violating the BST property. Four distinct unbalance scenarios (two for +2 balance and two for -2 balance) can occur, each with a corresponding rotation to restore balance.
+Here, the node with key 6 has a left subtree height of 2 and a right subtree height of 0, violating the AVL balance condition.
+
+**Rebalancing with Rotations**
+
+To maintain balance, AVL trees perform rotations on nodes when they become unbalanced. There are four types of rotations:
+  1. Left Rotation
+  2. Right Rotation
+  3. Left-Right Rotation
+  4. Right-Left Rotation
+
+The appropriate rotation is selected based on the subtree causing the imbalance, as illustrated below:
 
 ![alt text](assets/image7.png)
 
 ![alt text](assets/image8.png)
 
-The scenarios with a balance of -2 are symmetrical.
-Due to the height invariant, an AVL tree with nn nodes has a maximum height of approximately log⁡(n). This results in O(log⁡(n)) complexity for lookup, insertion, and deletion.
-The AVL tree type in Haskell is defined similarly to a regular BST. The contains and smallest functions are also identical to those for a regular BST:
+These rotations ensure that an AVL tree with n nodes has a height of log⁡ n, providing efficient O(log ⁡n) complexity for lookup, insertion, and deletion.
+
+**Haskell AVL Tree Definition**
+
+The AVL tree type in Haskell is defined similarly to a regular BST. The `contains` and `smallest` functions are also identical to those for a regular BST:
 
 ```haskell
 data AVLTree a = Empty
                 | Node ( AVLTree a) a ( AVLTree a)
                 deriving (Show ,Eq)
+
 contains :: (Eq a, Ord a) => a -> AVLTree a -> Bool
 contains a Empty = False
 contains a (Node t1 v t2)
     | (a == v) = True
     | (a < v) = contains a t1
     | otherwise = contains a t2
+
 smallest :: AVLTree a -> Maybe a
 smallest Empty = Nothing
 smallest (Node Empty v t2) = Just v
 smallest (Node t1 v t2) = smallest t1
 ```
+
+**Building a Balanced Tree from a Sorted List**
+
+Using a sorted list, we can build a balanced binary tree by repeatedly dividing the list in half, where the middle element becomes the root of the subtree. This approach ensures that the tree remains balanced.
+```haskell
+-- Assumes input list is sorted
+construir :: [a] -> Arv a
+construir [] = Vazia
+construir xs = No x (construir xs') (construir xs'')
+    where
+        n = length xs `div` 2
+        xs' = take n xs
+        x:xs'' = drop n xs
+```
+
+Creating a balanced tree from a sorted list `[1, 2, 3, 4, 5, 6, 7]`:
+
+       4
+     /   \
+    2     6
+   / \   / \
+  1   3 5   7
+
+**Removing a Value**
+
+Removing a value from an AVL tree requires careful handling to maintain balance. The removal operation involves:
+  1. **Searching for the node**: If `x < y`, search the left subtree; if `x > y`, search the right subtree.
+  2. **Removing the node**:
+      - If the node has a single child, replace the node with its child.
+      - If the node has two children, replace it with the smallest node in the right subtree (or the largest in the left subtree).
+  3. **Rebalancing** after removal if necessary.
+
+Example:
+
+    1. Removing a node with a single child:
+
+        5                5
+      / \      →       /
+      3   7             3
+
+    2. Removing a node with two children by replacing it with the smallest value in the right subtree.
+
+Here’s the function to find the **smallest value**:
+
+```haskell
+maisEsq :: Arv a -> a
+maisEsq (No x Vazia _) = x
+maisEsq (No _ esq _) = maisEsq esq
+```
+
+And the function to **remove a node**, handling all cases:
+
+```haskell
+remover :: Ord a => a -> Arv a -> Arv a
+remover x Vazia = Vazia -- Value not found
+remover x (No y Vazia dir) | x == y = dir -- One child
+remover x (No y esq Vazia) | x == y = esq -- One child
+remover x (No y esq dir)
+    | x < y = No y (remover x esq) dir
+    | x > y = No y esq (remover x dir)
+    | x == y = let z = maisEsq dir in No z esq (remover z dir)
+```
+
+This function allows safe deletion while ensuring the tree remains ordered.
 
 > [**EA-5:** UT-23, UT-24, UT-25, UT-26, UT-27, UT-28](EA/EA5.hs)
 
@@ -1040,7 +1804,7 @@ smallest (Node t1 v t2) = smallest t1
 
 ### 6.1. Standard I/O
 
-Haskell programs interact with the console using standard input (stdin) for reading data and standard output (stdout) for writing data. By default, **stdin** is connected to the keyboard, and **stdout** is connected to the text terminal.
+In Haskell, standard input/output (I/O) operations allow programs to interact with the console using `stdin` for input and `stdout` for output. Here’s a breakdown of essential functions and concepts for Haskell I/O, with practical examples and an introduction to the `do` notation.
 Relevant Prelude functions for input/output on the console:
 
 | Function   | Comment                                                                                     |
@@ -1054,12 +1818,25 @@ Relevant Prelude functions for input/output on the console:
 | `getContents` | Reads all text from the console until an end-of-file (EOF) character is read from the stdin. |
 | `return`   | Returns an empty action with type `IO ()`.                                                  |
 
-The end-of-file (`EOF`) character can be written on the console by typing `CTRL+D` (on Unix-based systems) or `CTRL+Z` (on Windows).
+The **EOF** (**End-of-File**) character can be simulated in the console using:
+  - `CTRL+D` on Unix-based systems.
+  - `CTRL+Z` on Windows.
 
-To create a Haskell program with I/O, define an `IO ()` function (like `main`) that performs side effects. The function `main :: IO ()` represents an action with no return value and is executed when the program runs.
+A sample module `IOUtils` provides useful functions for command-line applications, including functions to:
+  - **Clear the screen**: Erase console output.
+  - **Draw at specific positions**: Position text output at given coordinates.
+  - **Change text color**: Adjust foreground and background text colors.
+  - **Pause execution**: Wait for a specified time.
+
+**I/O Actions**
+
+An I/O action in Haskell, of type `IO t`, is a computation that, when executed, interacts with the outside world and may return a value of type `t`. For instance:
+  - `putChar` has the type `String -> IO ()` . It receives a Char and returns an action responsible for printing it on the console, so this action has no need to hold a value.
+  - `getChar`, on the other hand, has the type `IO Char` . It takes no arguments and returns an action responsible for asking the user for a character which it can then return.
+
+**Writing and Running a Basic Program**
 
 Example code (`printHi.hs`):
-
 ```haskell
 printHi :: IO ()
 printHi = putStrLn "Hi!"
@@ -1075,23 +1852,122 @@ $ ./printHi
 Hello, world!
 ```
 
-Unlike regular functions, one does not usually specify the type of main, which has the type declaration: `main :: IO ()` . Thus, main is a function that takes no arguments and returns a value of the type `IO()` , which represents an IO (input/output) action with nothing inside it.
+By convention, main is the entry point for the program, with type IO ().
 
-An IO action with type `IO` t is an entity that, when executed performs input/output and returns a value with type t. Examples:
-- `putChar` has the type `String -> IO ()` . It receives a Char and returns an action responsible for printing it on the console, so this action has no need to hold a value.
-- `getChar`, on the other hand, has the type `IO Char` . It takes no arguments and returns an action responsible for asking the user for a character which it can then return.
-
-In Haskell, you can execute multiple I/O actions in sequence using `do`-blocks.
+**Combining two comands**
 
 ```haskell
-hello :: IO ()
-hello = do
-    name <- getLine
-    putStrLn $ "Hello, " ++ name ++ "!"
+(>>) :: IO () -> IO () -> IO ()
 ```
-This hello function performs two IO actions:
-  1. It reads a line from the keyboard and binds it to name.
-  2. It then prints name to the console with a greeting.
+
+You can sequence I/O actions with the `(>>)` operator, which combines two I/O actions. For example:
+
+```haskell
+putChar '?' >> putChar '!'
+```
+
+This command prints a question mark followed by an exclamation mark.
+
+**Doing Nothing**: To perform a “no-operation” action, Haskell provides `done :: IO ()`. This action represents an action that does nothing, though it technically denotes a command that, when performed, will result in no visible effect. Compare thinking about doing nothing with actually doing nothing — they’re not the same thing!
+
+**Printing a String**
+
+```haskell
+putStr :: String -> IO ()
+putStr [] = done
+putStr (x:xs) = putChar x >> putStr xs
+```
+For example, `putStr "?!"` is equivalent to `putChar '?' >> (putChar '!' >> done)`.
+
+Using **higher-order functions**:
+```haskell
+putStr "?!"
+= foldr (>>) done (map putChar ['?','!'])
+= foldr (>>) done [putChar '?', putChar '!']
+= putChar '?' >> (putChar '!' >> done)
+```
+**Doing nothing and returning a value**
+
+The command
+`return :: a -> IO a`
+does nothing and but returns the given value.
+`return 42 :: IO Int`
+yields the value 42 and leaves the input unchanged.
+
+**Combining Commands with Values**
+
+The operator `>>=` (pronounced **"bind"**) is crucial for chaining I/O actions together while passing values from one action to the next. It allows you to sequence operations in a way that the result of one operation can directly influence the next.
+
+```haskell
+(>>=) :: IO a -> (a -> IO b) -> IO b
+```
+
+For example, performing the command
+```haskell
+getChar >>= \x -> putChar (toUpper x)
+```
+when the input is "abc" produces the output "A" and the remaning input is "bc".
+
+- The operator `>>=` behaves similarly to `let` when the continuation is a lambda expression.
+
+**Reading a line**
+```haskell
+getLine :: IO [Char]
+getLine = getChar >>= \x ->
+          if x == '\n' then
+            return []
+          else
+            getLine >>= \xs ->
+            return (x:xs)
+```
+
+**Commands as special cases**
+The general combinators for commands are:
+```haskell
+return :: a -> IO a
+(>>=) :: IO a -> (a -> IO b) -> IO b
+```
+The command done is a special case of return and >> is a special case of >>=:
+```haskell
+done :: IO ()
+done = return ()
+
+(>>) :: IO () -> IO () -> IO ()
+m >> n = m >>= \_ -> n
+```
+
+**Using `do` Notation**
+
+The `do` notation simplifies chaining I/O actions in sequence, allowing you to write multiple actions within a single block. Here’s an example function that reads input and prints a greeting:
+
+A program that echoes each input line in upper-case:
+```haskell
+echo :: IO ()
+echo = getLine >>= \line ->
+       if line == "" then
+        return ()
+       else
+        putStrLn (map toUpper line) >>
+        echo
+```
+
+Here’s the same program using `do` notation:
+```haskell
+echo :: IO ()
+echo = do {
+        line <- getLine;
+        if line == "" then
+          return ()
+        else do {
+          putStrLn (map toUpper line);
+          echo
+          }
+      }
+```
+
+To translate `do` notation into lambda notation:
+  - Replace each line of `x <- e` with `e >>= \x ->`.
+  - Replace each line of `e` with `e >>`.
 
 Inside a `do`-block:
 - `x <- action` runs the action and binds its result to `x`.
@@ -1105,22 +1981,24 @@ funcX = do
   return "123"
 ```
 
-When funcX is executed, it only prints "123" since the function returns an IO action with a string containing "123". The string is only printed when the IO action is evaluated, not when it is created
+Only the last `return` ("123") is evaluated since return does not end the function execution like in other languages.
 
 `return` is like the opposite of `<-`: `return` receives a value x and creates IO action that holds x, while `x <- <action>` extracts the x value of an action. 
 ```haskell
 x <- return y  <=> x = y
 ```
 
-`Let` bindings can also be used inside `do`-blocks. Unlike in pure Haskell code, the "in" is not needed. Example:
+You can declare local variables within a `do` block using `let`, without needing in. Example:
 
 ```haskell
 testLet :: IO ()
 testLet = do
   x <- getLine
-  let str = "A␣":x
+  let str = "A":x
   printStrLn str
 ```
+
+**Type Conversion: `show` and `read`**
 
 In Haskell, values can be converted between types using the `show` and `read` functions:
 - `show`: Converts values (e.g., integers or lists) to strings. Only types in the `Show` typeclass support this.
@@ -1141,13 +2019,847 @@ Prelude > read "[1,2,3.5]" :: [Double]
 
 - When using `read`, a type annotation is required if Haskell cannot infer the type. For example, `"3"` could be interpreted as an `Int`, `Integer`, or `Double`, so specifying the type ensures correct interpretation.
 
-A sample module `IOUtils` provides useful functions for command-line applications, including functions to:
-  - **Clear the screen**: Erase console output.
-  - **Draw at specific positions**: Position text output at given coordinates.
-  - **Change text color**: Adjust foreground and background text colors.
-  - **Pause execution**: Wait for a specified time.
-
-
 > [**EA-5:** IP-4, IP-6, IP-7, IP-8](EA/EA5.hs)
 
 ---
+---
+## Monads
+
+### Monoids
+
+A monoid is a pair (?, u) of an associative *operator* ? with an *identity value* u that satisfy the following laws:
+
+**Left-identity** u ? x = x
+
+**Right-identity** x ? u = x
+
+**Associativity** (x ? y ) ? z = x ? (y ? z)
+
+Examples: (+) and 0; (*) and 1; (||) and False; (&&) and True; (++) and []; (>>) and done
+
+---
+
+### Monads
+
+A *monad* is a pair of functions (>>=, return) that satisfy the following laws:
+
+**Left-identity** return a >>= f  =  f a
+
+**Right-identity** m >>= return  =  m
+
+**Associativity** (m >>= f) >>= g  =  m >>= (\x -> f x >>= g)
+
+**Monad laws in 'do' notation**
+
+```haskell
+-- (1) Left identity
+do { x'<-return x ; f x' } = do { f x }
+-- (2) Right identity
+do { x <- m; return x } = do { m }
+-- (3) Associativity
+do { y <- do { x <- m; f x }
+     g y
+   }
+  =
+do { x <- m;
+      do { y <- f x; g y }
+   }
+  =
+do { x <- m;
+     y <- f x;
+     g y
+   }
+```
+
+**The monad type class**
+
+Monad operations in Haskell are overloaded in a type class.
+
+```haskell
+-- in the Prelude
+class Monad m where
+return :: a -> m a
+(>>=) :: m a -> (a -> m b) -> m b
+instance Monad IO where
+return = ... -- primitive ops
+(>>=) = ...
+-- other Monad instances
+```
+
+---
+
+### The partially monad
+
+**The `Maybe` type**
+
+`data Maybe a = Nothing | Just a`
+A value of type `Maybe` a is either:
+    `Nothing` representing the absence of further information;
+    `Just` x with a further value x :: a
+
+```haskell
+Just 42 :: Maybe Int
+Nothing :: Maybe Int
+
+Just "hello" :: Maybe String
+Nothing :: Maybe String
+
+Just (42, "hello") :: Maybe (Int,String)
+Nothing :: Maybe (Int,String)
+```
+
+**Using `Maybe` to Represent Failure**
+
+The `Maybe` monad is often used for partial functions, where the function may not be able to produce a result for every possible input. A common example is the `lookup` function, which searches for a key in a list of key-value pairs:
+
+```haskell
+lookup :: Eq a => a -> [(a, b)] -> Maybe b
+lookup k ((x, v):assocs)
+  | k == x    = Just v       -- Key found
+  | otherwise = lookup k assocs
+lookup _ []    = Nothing      -- Key not found
+```
+
+- If the key `k` is found in the list, `lookup` returns `Just v` where `v` is the associated value.
+- If the key is not found, `lookup` returns `Nothing`, indicating a failure to find the value.
+
+Example:
+```haskell
+phonebook :: [(String, String)]
+phonebook = [ ("Bob", "01788 665242"),
+              ("Fred", "01624 556442"),
+              ("Alice", "01889 985333"),
+              ("Jane", "01732 187565") ]
+```
+
+```bash
+> lookup "Bob" phonebook
+Just "01788 665242"
+
+> lookup "Alice" phonebook
+Just "01889 985333"
+
+> lookup "Zoe" phonebook
+Nothing
+```
+
+**Combining lookups**
+Return the pair of phone, email and fail if either lookup fails.
+
+```haskell
+getPhoneEmail :: String -> Maybe (String,String)
+getPhoneEmail name =
+  case lookup name phonebook of
+    Nothing -> Nothing
+    Just phone -> case lookup name emails of
+      Nothing -> Nothing
+      Just email -> Just (phone,email)
+```
+Using nested case expressions for handling Maybe values can quickly become complex because each level requires checking for Nothing explicitly. To solve this:
+
+**Monad Instance for `Maybe`**
+
+The `Maybe` type has a `Monad` instance, which enables chaining of computations that may fail. Here’s how the `Monad` instance for `Maybe` is implemented:
+
+```haskell
+instance Monad Maybe where
+  return = Just
+  Nothing >>= _ = Nothing
+  Just x >>= f = f x
+```
+
+Specific types of the monad operations:
+```haskell
+return :: a -> Maybe a
+(>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b
+```
+
+- `return` wraps a value in the `Just` constructor.
+- `>>=` (bind) will propagate `Nothing` values (like an exception) through the computation chain.
+- When applied to `Just x`, it will apply the function `f` to `x`, continuing the computation.
+
+Example:
+The code gets much shorter with >>= handling the failure cases.
+
+```haskell
+getPhoneEmail :: String -> Maybe (String,String)
+getPhoneEmail name =
+  lookup name phonebook >>= \phone ->
+  lookup name emails >>= \email ->
+  return (phone,email)
+```
+
+Gets even simpler by using `do` notation.
+
+```haskell
+getPhoneEmail :: String -> Maybe (String,String)
+getPhoneEmail name
+  = do phone <- lookup name phonebook
+      email <- lookup name emails
+      return (phone,email)
+```
+
+---
+
+### The error monad
+
+**Representing Errors with `Either`**
+
+The `Either a b `type is used to represent computations that may either produce a result (`Right b`) or fail with an error (`Left a`).
+We use `Left` to indicate an error, and `Right` to indicate a valid result.
+
+```haskell
+-- from the Prelude
+data Either a b = Left a | Right b
+```
+
+We can use:
+- Left to tag errors (the *exceptions*);
+- Right to tag valid results.
+
+Example: **Integer Division with Either**
+
+We define a function `myDiv` that performs integer division with error handling:
+
+```haskell
+myDiv :: Int -> Int -> Either String Int
+myDiv x y
+  | y == 0           = Left "zero division"
+  | x `mod` y /= 0   = Left "not exact"
+  | otherwise        = Right (x `div` y)
+```
+
+Usage:
+
+```bash
+> myDiv 42 2
+Right 21
+
+> myDiv 42 0
+Left "zero division"
+
+> myDiv 42 5
+Left "not exact"
+```
+
+**Monad Instance for `Either`**
+
+The `Either` type has a `Monad` instance in the Haskell Prelude, specifically `Either e`. Here’s how it's defined:
+
+```haskell
+instance Monad (Either e) where
+    return x       = Right x
+    Left e >>= k   = Left e
+    Right x >>= k  = k x
+```
+
+This means:
+  - `return x` produces a `Right` value, representing a successful result.
+  - `>>=` (bind) applies a function to the `Right` value, while `Left` values propagate through the computation like *exceptions*.
+
+Examples:
+
+```bash
+> Right 41 >>= \x -> return (x + 1)
+Right 42
+
+> Left "boom" >>= \x -> return (x + 1)
+Left "boom"
+
+> Right 100 >>= \x -> Left "no way!"
+Left "no way!"
+```
+
+**Proving the Monad Laws for Either**
+
+**Note** that `Either e` is a **monad** but `Either` itself is not a **monad**.
+To verify that `Either e` is indeed a monad, we need to show it satisfies the *three monad laws*:
+
+    **Left Identity**: return a >>= k should be the same as k a.
+        
+        Proof:
+
+    ```haskell
+    return a >>= k
+    -- by the monad definition of return for Either
+    = Right a >>= k
+    -- applying >>= for Right
+    = k a
+    ```
+
+**Right Identity**: m >>= return should be the same as m.
+
+  Proof:
+  If `m = Left e`:
+
+        ```haskell
+
+        Left e >>= return
+        -- by the monad definition of >>= for Left
+        = Left e
+        ```
+
+  If `m = Right x`:
+
+        ```haskell
+        Right x >>= return
+        -- by the monad definition of >>= for Right
+        = return x
+        -- by the monad definition of return
+        = Right x
+        ```
+**Associativity**: (m >>= k) >>= h should be the same as m >>= (\x -> k x >>= h).
+
+  Proof:
+  If `m = Left e`:
+
+  ```haskell
+  (Left e >>= k) >>= h
+  -- by the monad definition of >>= for Left
+  = Left e >>= h
+  -- by the monad definition of >>= for Left again
+  = Left e
+  ```
+
+  ```haskell
+
+  Left e >>= (\x -> k x >>= h)
+  -- by the monad definition of >>= for Left
+  = Left e
+  ```
+
+  If `m = Right x`:
+
+  ```haskell
+  (Right x >>= k) >>= h
+  -- by the monad definition of >>= for Right
+  = k x >>= h
+  ```
+  ```haskell
+  Right x >>= (\x -> k x >>= h)
+  -- by the monad definition of >>= for Right
+  = k x >>= h
+  ```
+
+By satisfying these laws, `Either e` is confirmed to be a monad. This lets us chain computations that may fail, with errors propagating through `Left` values.
+
+---
+
+### The state monad
+
+The `State` monad is used to represent stateful computations in Haskell. Here’s a breakdown of how it works:
+
+**Representing Stateful Computations**
+
+Stateful computations can be seen as functions that take a state and return a result along with a new state:
+
+```haskell
+state -> (result, new state)
+```
+
+This means each computation both consumes and produces a state, allowing the state to be threaded through a series of computations.
+
+**Definition of the State Monad**
+
+The `State` monad is defined in `Control.Monad.State`.
+
+```haskell
+newtype State s a = State (s -> (a, s))
+-- type for state computations
+
+run :: State s a -> s -> (a, s)
+run (State f) s = f s
+instance Monad (State s) where
+  return a = State (\s -> (a, s))
+  m >>= k = State (\s ->
+              let (x, s') = run m s
+              in run (k x) s')
+```
+
+- Note: For something to be a monad it should also satisfy the three monad laws.
+
+---
+---
+
+## Modules and Abstract Types
+
+### Concrete Types
+
+These are defined explicitly by listing their constructors. For example:
+
+```haskell
+data Bool = False | True
+data Nat = Zero | Succ Nat
+```
+
+This approach is considered **concrete** because it defines the actual data representation, without specifying any operations or behaviors.
+
+---
+
+### Abstract Types
+
+Instead of detailing the internal representation, abstract types focus on specifying the operations a type should support.
+
+This is considered an **abstract** specification because it omits the concrete details of the data representation, focusing instead on what the type can do rather than how it is implemented.
+
+---
+
+### Stack
+
+A **stack** is a data structure that follows the *LIFO* (Last In, First Out) principle, meaning that the last value added is the first one to be removed.
+
+**Stack Operations**
+
+The fundamental operations associated with a stack are:
+  - **push**: Adds a value to the top of the stack.
+  - **pop**: Removes the value from the top of the stack.
+  - **top**: Retrieves the value at the top of the stack without removing it.
+  - **empty**: Creates an empty stack.
+  - **isEmpty**: Checks if the stack is empty.
+
+**Stack Specification**
+
+We can specify a stack in Haskell using a type Stack along with the functions for each operation:
+
+```haskell
+data Stack a -- A stack that holds values of type 'a'
+
+push :: a -> Stack a -> Stack a   -- Adds a value to the top of the stack
+pop :: Stack a -> Stack a          -- Removes the value from the top of the stack
+top :: Stack a -> a                -- Gets the value at the top of the stack
+empty :: Stack a                   -- Creates an empty stack
+isEmpty :: Stack a -> Bool         -- Checks if the stack is empty
+```
+
+This specification provides a clear interface for using stacks while abstracting away the details of their implementation.
+
+---
+
+### Implementation of an Abstract Type in Haskell
+
+To implement an abstract type in Haskell, we follow these steps:
+  1. **Choose a Concrete Representation**: We decide on how the data will be represented internally.
+  2. **Implement Operations**: We define the operations that can be performed on this type.
+  3. **Hide the Representation**: We ensure that users of the type only have access to the type itself and its operations, without exposing the underlying representation.
+
+---
+
+### Using Modules in Haskell
+
+Modules in Haskell allow us to group related definitions, such as types, constants, and functions, while controlling what is accessible from outside the module.
+
+- **Defining a Module**: We define a module Foo in a file named Foo.hs with the declaration:
+
+  ```haskell
+  module Foo where
+  ```
+
+- **Importing a Module**: To use the Foo module in another module, we add an import statement:
+
+  ```haskell
+  import Foo
+  ```
+- **Exporting Specific Entities**: We can specify which types and functions are exported by the module to control visibility:
+
+  ```haskell
+  module Foo (T1, T2, f1, f2, ...) where
+  ```
+
+---
+
+### Stack implementation
+
+Here’s how we can implement the stack abstract type using a module:
+
+```haskell
+module Stack (Stack, push, pop, top, empty, isEmpty) where
+
+-- Define the Stack type using a concrete representation (list)
+data Stack a = Stk [a]  -- Stack implemented with lists
+
+-- Push a value onto the stack
+push :: a -> Stack a -> Stack a
+push x (Stk xs) = Stk (x:xs)
+
+-- Pop a value from the stack
+pop :: Stack a -> Stack a
+pop (Stk (_:xs)) = Stk xs
+pop _ = error "Stack.pop: empty stack"
+
+-- Get the value at the top of the stack
+top :: Stack a -> a
+top (Stk (x:_)) = x
+top _ = error "Stack.top: empty stack"
+
+-- Create an empty stack
+empty :: Stack a
+empty = Stk []
+
+-- Check if the stack is empty
+isEmpty :: Stack a -> Bool
+isEmpty (Stk []) = True
+isEmpty (Stk _)  = False
+```
+
+---
+
+### Using the Abstract Type
+
+To determine if a string of characters has correctly matched parentheses, we can utilize an auxiliary stack data structure. Here’s how we can implement this logic in Haskell using the Stack module we defined earlier.
+
+*Algorithm*
+  1. Push '(' onto the stack when encountered.
+  2. Pop from the stack when encountering ')', ensuring that the top of the stack is the matching '('.
+  3. After processing the entire string, if the stack is empty, then the parentheses are correctly matched.
+
+Here’s how the implementation looks in Haskell:
+
+```haskell
+import Stack
+
+-- Main function to check if parentheses are correctly matched
+parent :: String -> Bool
+parent str = parentAux str empty
+
+-- Auxiliary function that takes a string and a stack of characters
+parentAux :: String -> Stack Char -> Bool
+parentAux [] stk = isEmpty stk  -- If no characters left, check if the stack is empty
+parentAux (x:xs) stk
+  | x == '(' = parentAux xs (push '(' stk)  -- Push '(' onto the stack
+  | x == ')' = not (isEmpty stk) &&           -- Check for matching ')'
+               top stk == '(' && 
+               parentAux xs (pop stk)          -- Pop if there is a match
+  | otherwise = parentAux xs stk  -- Ignore other characters
+```
+
+*Explanation:*
+  Function `parent`: This is the main function that initializes the check by calling `parentAux` with an empty stack.
+  Function `parentAux`:
+  - If the string is empty ([]), it checks if the stack is empty, indicating all parentheses were matched.
+  - If the character is '(', it pushes it onto the stack.
+  - If the character is ')', it checks if the stack is not empty and the top of the stack is '('. If so, it pops the stack and continues.
+  - If the character is neither ( nor ), it simply continues processing the rest of the string.
+
+### Properties of Stacks
+
+We can specify the behavior of stack operations using algebraic equations:
+
+  **Pop and Push:**
+      `pop (push x s) = s`
+          This states that pushing an element x onto stack s and then popping it will return the original stack s.
+
+  **Top Operation:**
+      `top (push x s) = x`
+          This indicates that after pushing x onto the stack s, the top element will be x.
+
+  **Empty Stack:**
+      `isEmpty empty = True`
+          An empty stack is indeed empty.
+      `isEmpty (push x s) = False`
+          A stack with any elements is not empty.
+
+These properties are intuitively valid and can be formally proven based on the definitions of the stack operations.
+
+---
+
+### Set Operations
+
+  - **member**: Tests if an element belongs to a set.
+  - **insert**: Adds an element to a set.
+  - **delete**: Removes an element from a set.
+  - **union**: Combines two sets into one.
+  - **intersection**: Gets the common elements between two sets.
+  - **empty**: Creates an empty set.
+  - **isEmpty**: Checks if a set is empty.
+  - **fromList**: Constructs a set from a list of elements.
+  - **toList**: Lists the elements in a set.
+
+Here are some examples illustrating the usage of set operations:
+
+```haskell
+> insert 1 (insert 2 (insert 1 empty))
+fromList [1,2]
+
+> delete 2 (fromList [1,2,3])
+fromList [1,3]
+
+> member 2 (fromList [1,3,4,6])
+False
+
+> intersection (fromList [1..4]) (fromList [3..6])
+fromList [3,4]
+```
+
+---
+
+### Implementation of Sets using Binary Search Trees
+
+In this implementation, we will represent sets using binary search trees (BST), which allow for more efficient insertion and searching than a list. For this approach, we require a total order among the elements in the set.
+
+We will define the `Set` type as follows:
+
+```haskell
+data Set a = Empty 
+            | Node a (Set a) (Set a)
+```
+
+- `Empty`: Represents an empty set.
+- `Node a (Set a) (Set a)`: Represents a node containing an element `a`, along with two subtrees: one for elements less than `a` (left subtree) and one for elements greater than `a` (right subtree).
+
+We will place all definitions into a module that exports the `Set` type and its associated operations, while hiding the constructors `Empty` and `Node`.
+
+```haskell
+module Set 
+  ( Set, 
+    empty, insert, delete, member,
+    union, intersection, fromList, toList) where
+```
+
+**Function Implementations**
+
+1. **Member Function**: Checks if an element is in the set.
+
+```haskell
+member :: Ord a => a -> Set a -> Bool
+member x Empty = False
+member x (Node y left right)
+  | x == y = True
+  | x > y  = member x right
+  | x < y  = member x left
+```
+
+2. **Insert Function**: Inserts an element into the set.
+
+```haskell
+insert :: Ord a => a -> Set a -> Set a
+insert x Empty = Node x Empty Empty
+insert x (Node y left right)
+  | x == y = Node y left right  -- No duplicates allowed
+  | x > y  = Node y left (insert x right)
+  | x < y  = Node y (insert x left) right
+```
+
+3. **Delete Function**: Removes an element from the set. (Implementation will follow later.)
+
+```haskell
+delete :: Ord a => a -> Set a -> Set a
+delete x Empty = Empty  -- Nothing to delete
+delete x (Node y left right)
+  | x < y   = Node y (delete x left) right
+  | x > y   = Node y left (delete x right)
+  | otherwise = case (left, right) of
+      (Empty, Empty) -> Empty  -- Leaf node case
+      (Empty, _)     -> right  -- Only right subtree
+      (_, Empty)     -> left   -- Only left subtree
+      _              -> let (minRight, newRight) = removeMin right
+                        in Node minRight left newRight
+  where
+    removeMin (Node z Empty r) = (z, r)
+    removeMin (Node z l r) = let (minLeft, newLeft) = removeMin l
+                              in (minLeft, Node z newLeft r)
+```
+
+4. **Empty Set**: Returns an empty set.
+
+```haskell
+empty :: Set a
+empty = Empty
+```
+
+5. **Check if Set is Empty**:
+
+```haskell
+isEmpty :: Set a -> Bool
+isEmpty Empty = True
+isEmpty _ = False
+```
+
+6. **Convert Set to List**: Lists the elements in the set in sorted order.
+
+```haskell
+toList :: Set a -> [a]
+toList Empty = []
+toList (Node x l r) = toList l ++ [x] ++ toList r
+```
+
+7. **Create Set from List**: Constructs a set from a list of elements.
+
+```haskell
+fromList :: Ord a => [a] -> Set a
+fromList = foldr insert Empty
+```
+
+8. **Union Function**: Combines two sets.
+
+```haskell
+union :: Ord a => Set a -> Set a -> Set a
+union s1 Empty = s1
+union Empty s2 = s2
+union (Node x left right) s2 = union left (union right (insert x s2))
+```
+
+9. **Intersection Function**: Gets common elements between two sets.
+
+```haskell
+intersection :: Ord a => Set a -> Set a -> Set a
+intersection Empty _ = Empty
+intersection _ Empty = Empty
+intersection (Node x left right) s2
+  | member x s2 = Node x (intersection left s2) (intersection right s2)
+  | otherwise = union (intersection left s2) (intersection right s2)
+```
+
+---
+
+### Properties of Set Operations
+
+We can specify certain properties that should hold for the operations:
+
+1. **Membership**:
+   - `member x empty = False`
+   - `member x (insert x a) = True`
+   - `member x (insert y a) = member x a` if `x /= y`
+
+2. **Insertion**:
+   - `insert x (insert x a) = insert x a`
+   - `insert x (insert y a) = insert y (insert x a)`
+
+---
+
+### Association Tables
+
+In addition to sets, we can define tables (also known as **maps** or dictionaries) where each key is associated with a single value. The operations typically include:
+
+- **Insert**: Adds a new key-value pair.
+- **Delete**: Removes a key (if it exists).
+- **Lookup**: Retrieves a value by key.
+- **Empty**: Creates an empty table.
+- **FromList**: Constructs a table from a list of pairs.
+- **ToList**: Lists the pairs in the table.
+
+```haskell
+> let tbl = insert 'a' 1 (insert 'b' 2 empty)
+fromList [('a',1), ('b',2)]
+
+> lookup 'b' tbl
+Just 2
+
+> lookup 'c' tbl
+Nothing
+
+> insert 'b' 3 tbl
+fromList [('a',1), ('b',3)]
+```
+
+These examples illustrate how to use the defined operations for managing both sets and association tables in Haskell. This structure allows for efficient data management and retrieval based on the underlying tree implementations.
+
+---
+
+### Implementation of Association Tables using Binary Search Trees
+
+In this implementation, we will represent association tables (also known as maps or dictionaries) using binary search trees (BST), where each key is associated with a value. We only require a total order for the keys, allowing for efficient insertion and lookup.
+
+We will define the `Map` type as follows:
+
+```haskell
+data Map k v = Empty
+              | Node k v (Map k v) (Map k v)
+```
+
+- `Empty`: Represents an empty map.
+- `Node k v (Map k v) (Map k v)`: Represents a node containing a key `k`, a value `v`, and two subtrees: one for keys less than `k` (left subtree) and one for keys greater than `k` (right subtree).
+
+We will place all definitions into a module that exports the `Map` type and its associated operations, while hiding the constructors `Empty` and `Node`.
+
+```haskell
+module Map
+  ( Map, 
+    empty, insert, delete,
+    lookup, fromList, toList) where
+```
+
+---
+
+### Function Implementations
+
+1. **Insert Function**: Inserts a key-value pair into the map.
+
+```haskell
+insert :: Ord k => k -> v -> Map k v -> Map k v
+insert x v Empty = Node x v Empty Empty
+insert x v (Node y u l r)
+  | x == y = Node x v l r  -- Update value if key already exists
+  | x > y  = Node y u l (insert x v r)
+  | x < y  = Node y u (insert x v l) r
+```
+
+2. **Delete Function**: Removes a key from the map. The implementation of the delete function will follow, usually involving finding the minimum value from the right subtree to replace the deleted node's key.
+
+```haskell
+delete :: Ord k => k -> Map k v -> Map k v
+delete x Empty = Empty  -- Nothing to delete
+delete x (Node y v l r)
+  | x < y   = Node y v (delete x l) r
+  | x > y   = Node y v l (delete x r)
+  | otherwise = case (l, r) of
+      (Empty, Empty) -> Empty  -- Leaf node case
+      (Empty, _)     -> r       -- Only right subtree
+      (_, Empty)     -> l       -- Only left subtree
+      _              -> let (minRight, newRight) = removeMin r
+                        in Node minRight v l newRight
+  where
+    removeMin (Node z Empty r) = (z, r)
+    removeMin (Node z l r) = let (minLeft, newLeft) = removeMin l
+                              in (minLeft, Node z newLeft r)
+```
+
+3. **Lookup Function**: Finds a value associated with a given key. If the key is not found, it will return `Nothing`. We will use the `Maybe` type for this purpose.
+
+```haskell
+data Maybe a = Nothing | Just a
+
+lookup :: Ord k => k -> Map k v -> Maybe v
+lookup x Empty = Nothing  -- Not found
+lookup x (Node y v l r)
+  | x == y = Just v        -- Found
+  | x > y  = lookup x r
+  | x < y  = lookup x l
+```
+
+---
+
+### Some Properties of the Operations
+
+The following properties hold for the map operations:
+
+1. **Lookup on Empty Map**:
+   - `lookup x empty = Nothing`
+
+2. **Lookup on Insert**:
+   - `lookup x (insert x v a) = Just v` (if the key was inserted)
+   - `lookup x (insert y v a) = lookup x a` if `x /= y` (lookup remains unchanged)
+
+3. **Insertion**:
+   - `insert x v (insert x u a) = insert x v a` (inserting the same key does not change the map)
+   - `insert x v (insert y u a) = insert y u (insert x v a)` if `x /= y` (order of insertion doesn't matter for different keys)
+
+### Handling Namespaces with Qualified Imports
+
+In Haskell, if you want to use operations from different modules that share the same name (like `insert`), you can import them qualified. This is useful to avoid name clashes, especially with Prelude functions.
+
+```haskell
+import qualified Set
+import qualified Map
+
+Set.empty      -- Accessing the empty set
+Map.empty      -- Accessing the empty map
+Set.insert     -- Inserting into a set
+Map.insert     -- Inserting into a map
+Map.lookup     -- Looking up a value in a map
+lookup         -- Looking up a value in a list (from Prelude)
+```
+
+This implementation provides a clear structure for managing associations between keys and values in a way that allows for efficient operations based on binary search trees.
+
+---
+# THE END :)
