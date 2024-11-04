@@ -57,20 +57,85 @@ orderedTriples :: [(Int, Int, Int)] -> [(Int, Int, Int)]
 orderedTriples a = filter (\(x, y, z) -> x <= y && y <= z) a
 
 -- HO-15
+myMap :: (a -> a) -> [a] -> [a]
+myMap f [] = []
+myMap f (x:xs) = f x : myMap f xs
+
 -- HO-16
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter f [] = []
+myFilter f (x:xs)
+        | f x         = x : myFilter f xs
+        | otherwise   = myFilter f xs
+
 -- HO-17
+-- a)
+myTakeWhile :: (a -> Bool) -> [a] -> [a]
+myTakeWhile f [] = []
+myTakeWhile f (x:xs)
+      | f x        = x : myTakeWhile f xs
+      | otherwise  = []
+
+-- b)
+myDropWhile :: (a -> Bool) -> [a] -> [a]
+myDropWhile f [] = []
+myDropWhile f (x:xs)
+      | f x        = myDropWhile f xs
+      | otherwise  = x:xs
+
 -- HO-18
+-- a) using recursion
+myAllA :: (a -> Bool) -> [a] -> Bool
+myAllA f [] = True
+myAllA f (x:xs)
+      | f x  = myAllA f xs
+      | otherwise = False
+
+-- b) using list comprehension and the 'and' function, without recursion
+myAllB :: (a -> Bool) -> [a] -> Bool
+myAllB f (x:xs) = and [f y | y <- x:xs]
+
+-- c) only using 'map
+myAllC :: (a -> Bool) -> [a] -> Bool
+myAllC f (x:xs) = and (map f (x:xs))
+
+-- d) only using 'any'
+myAllD :: (a -> Bool) -> [a] -> Bool
+myAllD f (x:xs) = not (any (not . f) (x:xs))
+
 -- HO-22
+countVowels :: String -> Int
+countVowels s = sum (map isVowel s)
+
+isVowel :: Char -> Int
+isVowel v 
+    | v == 'a'  = 1
+    | v == 'e'  = 1 
+    | v == 'i'  = 1
+    | v == 'o'  = 1
+    | v == 'u'  = 1
+    | otherwise = 0
+
 -- HO-23
+-- funtion f computes the largest common prefix of the input lists x and y.
 
 ----------
 
 -- HO-27
+-- The definition myAny = or . map is incorrect because map is missing the predicate function argument, causing a type mismatch. The correct approach is to define myAny with an additional argument for the predicate, like this:
+-- myAny p = or . map p
+
 -- HO-29
+-- a) True
+-- b) [6, 20, 64, 2]
+-- c) [[4,5,6], [12,11,10]]
+-- d) [8,8]
 
 ----------
 
 -- HO-32
+
+
 -- HO-33
 -- HO-35
 -- HO-37

@@ -899,7 +899,7 @@ add' (x, y) = x + y
 | **dropWhile** | Returns the remainder of a list after calling `takeWhile`. | `dropWhile odd [1,1,1,2,3] -> [2,3]` |
 | **iterate**   | Returns an infinite list where the i-th element is the application of a function `f` on a value `x` i times (with indices starting at 0). | `iterate succ 0 -> [0,1,2,3,4,5,6,7,8,9,...]` |
 | **zipWith**   | Zips two lists, then combines each pair using a binary function. | `zipWith (+) [1,2,3,4] [3,2,4,1] -> [4,4,7,5]` |
-| **flip**      | Swaps the order of the arguments in a binary function. | `flip (/) 2 0 -> 2.0` |
+| **flip**      | Swaps the order of the arguments in a binary function. | `flip (/) 2 0 -> 0.0` |
 | **(.)**       | Function composition. | (Check section 4.5) |
 | **($)**       | Function application. | (Check section 4.5) |
 | **foldr**     | Right-associative fold of a structure. | (Check section 4.6) |
