@@ -134,21 +134,97 @@ isVowel v
 ----------
 
 -- HO-32
-
+myMapB :: (a -> a) -> [a] -> [a]
+myMapB f (x:xs) = foldr (\x acc -> (f x):acc) [] (x:xs)
 
 -- HO-33
+largePairs :: (Num a, Ord a) => a -> [(a, a)] -> [(a, a)]
+largePairs m = foldr (\(x, y) acc -> if (x + y) >= m then (x, y) : acc else acc) []
+
 -- HO-35
+separateSingleDigits :: [Int] -> ([Int], [Int])
+separateSingleDigits = foldr (\x (single, rest) -> if x < 10 then (x : single, rest) else (single, x : rest)) ([], [])
+
 -- HO-37
+-- a)
+myFoldr :: (a -> b -> b) -> b -> [a] -> b
+myFoldr _ acc [] = acc
+myFoldr f acc (x:xs) = f x ( myFoldr f acc xs)
+
+-- b)
+myFoldl :: (b -> a -> b) -> b -> [a] -> b
+myFoldl _ acc [] = acc
+myFoldl f acc (x:xs) = myFoldl f (f acc x) xs
+
 -- HO-40
+-- a)
+myScanr  :: (a -> b -> b) -> b -> [a] -> [b]
+myScanr _ acc [] = [acc]
+myScanr f acc (x:xs) = f x (head n) : n
+      where n = myScanr f acc xs
+
+-- b) using 'foldr' instead of recursion
+myScanr' :: (a -> b -> b) -> b -> [a] -> [b]
+myScanr' f acc xs = foldr step [acc] xs
+  where step x accs = f x (head accs) : accs
+
 -- HO-42
+myFoldlB :: (a -> b -> a) -> a -> [b] -> a
+myFoldlB f acc l =
+  foldr (\x newAcc z -> f (newAcc z) x) id l acc
+
 -- HO-43
+kadane :: (Ord a, Num a) => [a] -> a
+kadane l =  maximum (scanl (\ acc x -> max x (acc + x)) 0 l)
 
 ----------
 
 -- HO-47
+f :: [a] -> [a] -> [a]
+f = flip (foldr (:))
+
 -- HO-48
+myLastA :: [a] -> a
+myLastA = head . reverse
+
+myLastB :: [a] -> a
+myLastB = foldl (flip const) (error "empty list")
+
 -- HO-49
+-- a)
+countLetters :: String -> Int
+countLetters = length . concat . words
+
+--b)
+countFirst :: String -> Int
+countFirst = length . head . words
+
 -- HO-50
+-- a)
+myReverseA :: [a] -> [a]
+myReverseA = foldr (flip (++) . (:[])) []
+
+-- b)
+myReverseB :: [a] -> [a]
+myReverseB = foldl (flip (:)) []
+
 -- HO-51
+-- a)
+mySum :: (Num a) => [a] -> a
+mySum = foldr (+) 0
+
+-- b)
+myProduct :: (Num a) => [a] -> a
+myProduct = foldr (*) 1
+
+-- c)
+myLength :: (Num b) => [a] -> b
+myLength = sum . map (const 1)
+
 -- HO-52
+extractDigits :: Integer -> [Integer]
+extractDigits = reverse . map (`mod` 10) . takeWhile (> 0) . iterate (`div` 10)
+
 -- HO-53
+kadaneA :: (Ord a, Num a) => [a] -> a
+kadaneA = maximum . scanl ((+) .( max 0)) 0
