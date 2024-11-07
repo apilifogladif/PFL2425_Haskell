@@ -93,8 +93,8 @@ main = print (sum (map (^2) [1..10]))
 |---------|------------|
 | `(+) x y`	| `x + y` | 
 | `(*) y 2`	| `y * 2` | 
-| `` x \mod` 2` `` | `mod x 2` | 
-| `` f x \div` n` `` | `div (f x) n` | 
+| `` x `mod` 2` `` | `mod x 2` | 
+| `` f x `div` n `` | `div (f x) n` | 
 
 
 ---
@@ -1357,7 +1357,7 @@ You can also create instances for custom types. For instance, defining equality 
 data Nat = Zero | Succ Nat
 instance Eq Nat where
 Zero == Zero = True -- base case
-Succ x == Succ y = x==y -- recursive casa
+Succ x == Succ y = x==y -- recursive case
 _ == _ = False
 ```
 Here, the recursive nature of `Nat` requires a recursive definition for equality as well.
@@ -1419,11 +1419,11 @@ Define an infix operator `%` to construct rational numbers, allowing for easier 
 p % q
 | q==0 = error "%: division by zero"
 | q<0 = (-p) % (-q)
-| otherwise = Frac (p‘div‘d) (q‘div‘d)
+| otherwise = Frac (p`div`d) (q`div`d)
 where d = mdc p q
 mdc :: Integer -> Integer -> Integer
 mdc a 0 = a
-mdc a b = mdc b (a‘mod‘b)
+mdc a b = mdc b (a`mod`b)
 ```
 
 Advantages:
@@ -1553,7 +1553,7 @@ In this recursive function, the base case is an empty tree, which returns an emp
 Here’s how the function is defined in Haskell:
 
 ```haskell
-`data Tree a = Node a (Tree a) (Tree a) | Empty`
+data Tree a = Node a (Tree a) (Tree a) | Empty
 
 listar :: Tree a -> [a]
 listar Empty = []
@@ -1657,12 +1657,15 @@ construir xs = foldr inserir Empty xs
 
 For example, calling `construir [3,1,2]` produces the tree:
 
+```bash
      2
     / \
    1   3
+```
 
 Calling `construir [4,3,2,1]` produces a skewed tree:
 
+```bash
 4
  \
   3
@@ -1670,6 +1673,7 @@ Calling `construir [4,3,2,1]` produces a skewed tree:
     2
      \
       1
+```
 
 This tree is **sorted but unbalanced**, which can **slow down operations like search**.
 
