@@ -726,6 +726,8 @@ paresIguais xs = length [(x, x') | (x, x') <- zip xs (tail xs), x == x']
 ```
 This function effectively counts how many times adjacent elements in the list are equal by leveraging the `zip` function.
 
+---
+
 ### String
 
 In Haskell, the String type is predefined as a synonym for a list of characters:
@@ -1691,7 +1693,7 @@ Searching in a standard BST can have a worst-case complexity of O(n). It occurs 
 
 **AVL trees**, named after inventors Adelson-Velsky and Landis, are **self-balancing BSTs** that automatically maintain balance after insertions and deletions. An AVL tree ensures that for every node, the height difference between its left and right subtrees is at most 1 (known as the height invariant).
 
-An example of an unbalanced node:
+An example of an unbalanced bst:
 
 ![alt text](assets/image6.png)
 
@@ -1751,11 +1753,13 @@ construir xs = No x (construir xs') (construir xs'')
 
 Creating a balanced tree from a sorted list `[1, 2, 3, 4, 5, 6, 7]`:
 
+```bash
        4
      /   \
     2     6
    / \   / \
   1   3 5   7
+```
 
 **Removing a Value**
 
@@ -1943,7 +1947,13 @@ m >> n = m >>= \_ -> n
 **Using `do` Notation**
 
 The `do` notation simplifies chaining I/O actions in sequence, allowing you to write multiple actions within a single block. Here’s an example function that reads input and prints a greeting:
-
+```haskell
+greet :: IO ()
+greet = do
+    putStrLn "What is your name?"
+    name <- getLine
+    putStrLn ("Hello, " ++ name ++ "!")
+```
 A program that echoes each input line in upper-case:
 ```haskell
 echo :: IO ()
@@ -2279,39 +2289,38 @@ Left "no way!"
 **Note** that `Either e` is a **monad** but `Either` itself is not a **monad**.
 To verify that `Either e` is indeed a monad, we need to show it satisfies the *three monad laws*:
 
-    **Left Identity**: return a >>= k should be the same as k a.
-        
-        Proof:
+  **Left Identity**: return a >>= k should be the same as k a.
+      
+  Proof:
 
-    ```haskell
-    return a >>= k
-    -- by the monad definition of return for Either
-    = Right a >>= k
-    -- applying >>= for Right
-    = k a
-    ```
+  ```haskell
+  return a >>= k
+  -- by the monad definition of return for Either
+  = Right a >>= k
+  -- applying >>= for Right
+  = k a
+  ```
 
 **Right Identity**: m >>= return should be the same as m.
 
   Proof:
   If `m = Left e`:
 
-        ```haskell
-
-        Left e >>= return
-        -- by the monad definition of >>= for Left
-        = Left e
-        ```
+  ```haskell
+  Left e >>= return
+  -- by the monad definition of >>= for Left
+  = Left e
+  ```
 
   If `m = Right x`:
 
-        ```haskell
-        Right x >>= return
-        -- by the monad definition of >>= for Right
-        = return x
-        -- by the monad definition of return
-        = Right x
-        ```
+  ```haskell
+  Right x >>= return
+  -- by the monad definition of >>= for Right
+  = return x
+  -- by the monad definition of return
+  = Right x
+  ```
 **Associativity**: (m >>= k) >>= h should be the same as m >>= (\x -> k x >>= h).
 
   Proof:
@@ -2326,7 +2335,6 @@ To verify that `Either e` is indeed a monad, we need to show it satisfies the *t
   ```
 
   ```haskell
-
   Left e >>= (\x -> k x >>= h)
   -- by the monad definition of >>= for Left
   = Left e
@@ -2543,6 +2551,8 @@ parentAux (x:xs) stk
   - If the character is '(', it pushes it onto the stack.
   - If the character is ')', it checks if the stack is not empty and the top of the stack is '('. If so, it pops the stack and continues.
   - If the character is neither ( nor ), it simply continues processing the rest of the string.
+
+---
 
 ### Properties of Stacks
 
@@ -2846,6 +2856,8 @@ The following properties hold for the map operations:
 3. **Insertion**:
    - `insert x v (insert x u a) = insert x v a` (inserting the same key does not change the map)
    - `insert x v (insert y u a) = insert y u (insert x v a)` if `x /= y` (order of insertion doesn't matter for different keys)
+
+---
 
 ### Handling Namespaces with Qualified Imports
 
